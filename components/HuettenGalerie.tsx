@@ -1,7 +1,5 @@
-"use client";
 import Image from "next/image";
-import { useDocumentLink } from "@/lib/useDocumentLink";
-import { LINK_ID } from "@/lib/verein";
+import { DOKUMENTE } from "@/lib/verein";
 
 const bilder = [
   "/SkihuetteSommerAußen.jpg",
@@ -19,7 +17,7 @@ const bilder = [
 ];
 
 const HuettenGalerie = () => {
-  const mietpreiseLink = useDocumentLink(LINK_ID.mietpreise);
+  const mietpreiseLink = DOKUMENTE.mietpreise;
 
   return (
     <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">

@@ -1,6 +1,5 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import { ImageUploadStrategy } from "./image-upload.strategy"
-import { PdfUploadStrategy } from "./pdf-upload.strategy"
 
 
 export interface FileUploadStrategy {
@@ -29,8 +28,6 @@ export class UploadStrategyFactory {
             case 'image/png':
             case 'image/JPG':
                 return new ImageUploadStrategy(s3Client, bucketName, region)
-            case 'application/pdf':
-                return new PdfUploadStrategy(s3Client, bucketName, region)
             default:
                 throw new Error(`Unsupported file type: ${fileType}`)
         }

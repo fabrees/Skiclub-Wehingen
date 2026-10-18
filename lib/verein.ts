@@ -10,10 +10,10 @@ export const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
 
 export const VORSTAND_MAIL = "vorstand@sc-wehingen.de";
 
-// IDs der Einträge in der LinkData-Tabelle (pflegbar unter /admin/editlinks)
-export const LINK_ID = {
-  beitrittserklaerung: 1,
-  mietpreise: 8,
+// PDFs liegen unter public/documents – zum Aktualisieren die Datei dort ersetzen
+export const DOKUMENTE = {
+  mitgliedsantrag: "/documents/mitgliedsantrag.pdf",
+  mietpreise: "/documents/mietpreise-skihuette.pdf",
 } as const;
 
 export const NAV_ITEMS = [

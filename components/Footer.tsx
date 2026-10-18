@@ -1,13 +1,11 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FaInstagram } from "react-icons/fa";
-import { useDocumentLink } from "@/lib/useDocumentLink";
 import {
   INSTAGRAM_HANDLE,
   INSTAGRAM_URL,
-  LINK_ID,
+  DOKUMENTE,
   LOIPE_URL,
   VORSTAND_MAIL,
   WHATSAPP_SKILIFT_URL,
@@ -16,7 +14,7 @@ import {
 const linkClass = "hover:text-white transition";
 
 const Footer = () => {
-  const beitrittLink = useDocumentLink(LINK_ID.beitrittserklaerung);
+  const beitrittLink = DOKUMENTE.mitgliedsantrag;
 
   return (
     <footer className="bg-alb-900 text-sm text-alb-100/80">

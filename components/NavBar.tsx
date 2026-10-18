@@ -5,9 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { useDocumentLink } from "@/lib/useDocumentLink";
 import {
-  LINK_ID,
+  DOKUMENTE,
   LOIPE_URL,
   NAV_ITEMS,
   WHATSAPP_SKILIFT_URL,
@@ -58,7 +57,7 @@ const TopBar = () => (
 const NavBar = () => {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const beitrittLink = useDocumentLink(LINK_ID.beitrittserklaerung);
+  const beitrittLink = DOKUMENTE.mitgliedsantrag;
 
   //to close the Hamburger Menu when clicking on the other contant of the Page
   const menuRef = useRef<HTMLDivElement | null>(null);

@@ -1,10 +1,8 @@
-"use client";
 import Link from "next/link";
-import { useDocumentLink } from "@/lib/useDocumentLink";
-import { LINK_ID } from "@/lib/verein";
+import { DOKUMENTE } from "@/lib/verein";
 
 const MitgliedCta = () => {
-  const beitrittLink = useDocumentLink(LINK_ID.beitrittserklaerung);
+  const beitrittLink = DOKUMENTE.mitgliedsantrag;
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24">

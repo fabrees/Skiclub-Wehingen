@@ -3,6 +3,11 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Blog } from "@prisma/client";
 
+// Große Fassung über den Bild-Optimierer: Der eigene Server holt das Bild von
+// S3, der Browser des Besuchers verbindet sich nicht direkt mit AWS
+const grossesBild = (src: string) =>
+  `/_next/image?url=${encodeURIComponent(src)}&w=1920&q=85`;
+
 // Alle Beiträge untereinander, mit Anker #beitrag-{id} für Links von der Startseite
 const NewsletterListe = () => {
   const [blogs, setBlogs] = useState<Blog[] | null>(null);
@@ -70,7 +75,7 @@ const NewsletterListe = () => {
           {/* Bilder sind oft Flyer mit Text – daher nie beschneiden, sondern vollständig zeigen */}
           <div className="bg-alb-50 p-4 sm:p-6 lg:col-span-4">
             <a
-              href={blog.img}
+              href={grossesBild(blog.img)}
               target="_blank"
               rel="noopener noreferrer"
               title="Bild in voller Größe öffnen"
