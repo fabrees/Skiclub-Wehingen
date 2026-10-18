@@ -1,4 +1,38 @@
+import { naechsterFossiliuslauf } from "@/lib/verein";
+
 // Alle Daten zum Fossiliuslauf an einer Stelle – hier jährlich anpassen
+
+// Genauer Termin, sobald er feststeht, z.B. new Date(2027, 8, 26) für den
+// 26.09.2027 (Monat zählt ab 0). Solange null, wird nur "September <Jahr>" angezeigt.
+export const FESTER_TERMIN: Date | null = null;
+
+export type Termin = {
+  fest: boolean;
+  // z.B. "Sonntag, 26. September 2027" bzw. "September 2027"
+  lang: string;
+  // für das Datums-Badge: z.B. "26.09." bzw. "September"
+  kurz: string;
+  jahr: number;
+};
+
+export function fossiliuslaufTermin(): Termin {
+  if (FESTER_TERMIN) {
+    return {
+      fest: true,
+      lang: FESTER_TERMIN.toLocaleDateString("de-DE", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+      kurz: FESTER_TERMIN.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" }),
+      jahr: FESTER_TERMIN.getFullYear(),
+    };
+  }
+
+  const jahr = naechsterFossiliuslauf().getFullYear();
+  return { fest: false, lang: `September ${jahr}`, kurz: "September", jahr };
+}
 
 export const ANMELDUNG_URL =
   "http://www.fossiliuslauf.sc-wehingen.de/anmeldung/anmeldung-2026.html";

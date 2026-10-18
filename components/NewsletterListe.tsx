@@ -64,18 +64,29 @@ const NewsletterListe = () => {
         <article
           key={blog.id}
           id={`beitrag-${blog.id}`}
-          className="grid scroll-mt-28 overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200 lg:grid-cols-12"
+          // overflow-clip statt overflow-hidden, sonst bleibt das Bild beim Scrollen nicht stehen
+          className="grid scroll-mt-28 overflow-clip rounded-3xl bg-white ring-1 ring-slate-200 lg:grid-cols-12"
         >
-          <div className="relative aspect-[16/10] bg-alb-50 lg:col-span-5 lg:aspect-auto lg:min-h-[360px]">
-            <Image
-              src={blog.img}
-              alt={blog.title}
-              fill
-              sizes="(min-width: 1024px) 40vw, 100vw"
-              className="object-cover"
-            />
+          {/* Bilder sind oft Flyer mit Text – daher nie beschneiden, sondern vollständig zeigen */}
+          <div className="bg-alb-50 p-4 sm:p-6 lg:col-span-4">
+            <a
+              href={blog.img}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Bild in voller Größe öffnen"
+              className="mx-auto block max-w-sm lg:sticky lg:top-28"
+            >
+              <Image
+                src={blog.img}
+                alt={blog.title}
+                width={800}
+                height={1000}
+                sizes="(min-width: 1024px) 360px, 384px"
+                className="h-auto w-full rounded-xl shadow-sm transition hover:shadow-md"
+              />
+            </a>
           </div>
-          <div className="p-6 sm:p-10 lg:col-span-7">
+          <div className="p-6 sm:p-10 lg:col-span-8">
             <p className="text-sm font-bold text-slate-500">{blog.createdAt}</p>
             <h2 className="mt-2 text-2xl font-extrabold text-alb-900 sm:text-3xl">{blog.title}</h2>
             {/* Wird von React in HTML umgewandelt und in einem Div ausgegeben */}

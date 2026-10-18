@@ -4,10 +4,10 @@ import { CalendarDays, Clock, MapPin, Trophy } from "lucide-react";
 import HoverButton from "@/components/HoverButton";
 import Sprinter from "@/components/Sprinter";
 import MapConsent from "@/components/MapConsent";
-import { naechsterFossiliuslauf } from "@/lib/verein";
 import {
   ANMELDUNG_URL,
   ERGEBNISSE_URL,
+  fossiliuslaufTermin,
   Gruppe,
   LAEUFE,
   MAPS_EMBED_URL,
@@ -54,12 +54,7 @@ const gruppen: {
 ];
 
 const Fossiliuslauf = () => {
-  const datum = naechsterFossiliuslauf().toLocaleDateString("de-DE", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const datum = fossiliuslaufTermin().lang;
 
   return (
     <div>

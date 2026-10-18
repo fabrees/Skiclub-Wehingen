@@ -45,7 +45,7 @@ const NewsletterCards: React.FC = () => {
     <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {blogs === null
         ? [0, 1, 2].map((i) => (
-            <div key={i} className="h-80 animate-pulse rounded-2xl bg-white" />
+            <div key={i} className="h-[30rem] animate-pulse rounded-2xl bg-white" />
           ))
         : blogs.slice(0, 3).map((blog) => (
             <Link
@@ -53,13 +53,14 @@ const NewsletterCards: React.FC = () => {
               href={`/newsletter#beitrag-${blog.id}`}
               className="group overflow-hidden rounded-2xl bg-white shadow-sm transition hover:shadow-lg"
             >
-              <div className="relative aspect-[16/10] overflow-hidden bg-alb-100">
+              {/* Hochformat-Feld, Bild vollständig – die Bilder sind oft Flyer mit Text */}
+              <div className="relative aspect-[4/5] overflow-hidden bg-alb-50">
                 <Image
                   src={blog.img}
                   alt={blog.title}
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover transition duration-500 group-hover:scale-105"
+                  className="object-contain p-4 transition duration-500 group-hover:scale-[1.03]"
                 />
               </div>
               <div className="p-6">

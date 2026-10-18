@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { naechsterFossiliuslauf, WHATSAPP_SKILIFT_URL } from "@/lib/verein";
+import { WHATSAPP_SKILIFT_URL } from "@/lib/verein";
+import { fossiliuslaufTermin } from "@/lib/fossiliuslauf";
 
 export const SkiliftFeature = () => (
   <section id="skilift" className="mx-auto grid max-w-7xl scroll-mt-24 items-center gap-12 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-2">
@@ -48,7 +49,7 @@ export const SkiliftFeature = () => (
 );
 
 export const FossiliuslaufFeature = () => {
-  const datum = naechsterFossiliuslauf();
+  const termin = fossiliuslaufTermin();
 
   return (
     <section className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-2">
@@ -64,10 +65,10 @@ export const FossiliuslaufFeature = () => {
         </div>
         <div className="absolute -bottom-6 -right-2 rounded-2xl bg-brand-500 px-6 py-4 text-center text-white shadow-xl sm:-right-6">
           <p className="eyebrow text-brand-100">Nächster Termin</p>
-          <p className="mt-1 text-3xl font-extrabold leading-none">
-            {datum.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" })}
+          <p className={`mt-1 font-extrabold leading-none ${termin.fest ? "text-3xl" : "text-2xl"}`}>
+            {termin.kurz}
           </p>
-          <p className="text-sm font-bold">{datum.getFullYear()}</p>
+          <p className="text-sm font-bold">{termin.jahr}</p>
         </div>
       </div>
       <div>

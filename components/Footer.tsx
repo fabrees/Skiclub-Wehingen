@@ -2,8 +2,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { FaInstagram } from "react-icons/fa";
 import { useDocumentLink } from "@/lib/useDocumentLink";
 import {
+  INSTAGRAM_HANDLE,
+  INSTAGRAM_URL,
   LINK_ID,
   LOIPE_URL,
   VORSTAND_MAIL,
@@ -31,6 +34,18 @@ const Footer = () => {
             Skiclub Wehingen e.V. – Traditionsverein auf dem Heuberg mit
             Skilift, Skihütte, Fossiliuslauf und MTB-Trail.
           </p>
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Skiclub Wehingen auf Instagram (@${INSTAGRAM_HANDLE})`}
+            className="group mt-5 inline-flex items-center gap-3 hover:text-white"
+          >
+            <span className="grid h-10 w-10 place-items-center rounded-full bg-white/10 transition group-hover:bg-white/20">
+              <FaInstagram className="h-5 w-5 text-white" />
+            </span>
+            <span className="font-semibold">@{INSTAGRAM_HANDLE}</span>
+          </a>
         </div>
 
         <div>

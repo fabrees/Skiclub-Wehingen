@@ -5,6 +5,9 @@ export const WHATSAPP_SKILIFT_URL =
 
 export const LOIPE_URL = "https://skiwanderwege-heuberg.de/";
 
+export const INSTAGRAM_HANDLE = "sc_wehingen";
+export const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
+
 export const VORSTAND_MAIL = "vorstand@sc-wehingen.de";
 
 // IDs der Einträge in der LinkData-Tabelle (pflegbar unter /admin/editlinks)

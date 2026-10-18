@@ -1,15 +1,11 @@
 import Link from "next/link";
 import { CalendarDays, Clock, House, MessageCircle } from "lucide-react";
-import { naechsterFossiliuslauf, WHATSAPP_SKILIFT_URL } from "@/lib/verein";
+import { WHATSAPP_SKILIFT_URL } from "@/lib/verein";
+import { fossiliuslaufTermin } from "@/lib/fossiliuslauf";
 
 // "Das Wichtigste" – Info-Leiste, die in das Hero-Bild hineinragt
 const QuickInfo = () => {
-  const laufDatum = naechsterFossiliuslauf().toLocaleDateString("de-DE", {
-    weekday: "long",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  const laufDatum = fossiliuslaufTermin().lang;
 
   const items = [
     {

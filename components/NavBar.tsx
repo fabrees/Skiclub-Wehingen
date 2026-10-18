@@ -101,7 +101,7 @@ const NavBar = () => {
               <span className="block font-extrabold text-alb-900">
                 Skiclub Wehingen
               </span>
-              <span className="block text-xs text-slate-500">e.V. · Heuberg</span>
+              <span className="block text-xs text-slate-500">e.V. · seit 1979</span>
             </span>
           </Link>
 
