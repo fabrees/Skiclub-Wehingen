@@ -1,29 +1,36 @@
 import Link from "next/link";
+import { Metadata } from "next";
 import { FaGithub } from "react-icons/fa";
+import PageHeader from "@/components/PageHeader";
+
+export const metadata: Metadata = {
+    title: "Impressum – Skiclub Wehingen",
+};
 
 const Impressum = () => {
     return (
-        <div className="my-28 max-w-3xl mx-auto p-6 text-gray-800">
-            <h1 className="text-3xl font-bold mb-6 text-orange-600">Impressum</h1>
+        <div>
+            <PageHeader eyebrow="Rechtliches" title="Impressum" />
+            <div className="mx-auto max-w-3xl px-4 py-16 text-lg leading-relaxed sm:px-6 sm:py-20">
 
             {/* Verantwortlicher */}
-            <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-orange-500">Angaben gemäß § 5 TMG</h2>
-                <div className="bg-gray-50 p-4 rounded-lg">
+            <section className="mb-12">
+                <h2 className="mb-4 text-2xl font-extrabold text-alb-900 sm:text-3xl">Angaben gemäß § 5 DDG</h2>
+                <div className="rounded-2xl bg-alb-50 p-6">
                     <p className="font-semibold">Skiclub Wehingen e.V.</p>
                     <p>Vertreten durch den 1. Vorsitzenden:</p>
                     <p className="mt-2 font-medium">Gerd Linse</p>
                     <p>Vorstadtstraße 14</p>
                     <p>78564 Wehingen</p>
                     <p>
-                        E-Mail: <a href="mailto:vorstand@sc-wehingen.de" className="text-orange-500 hover:underline">vorstand@sc-wehingen.de</a>
+                        E-Mail: <a href="mailto:vorstand@sc-wehingen.de" className="text-brand-600 hover:underline">vorstand@sc-wehingen.de</a>
                     </p>
                 </div>
             </section>
 
             {/* Registerangaben */}
-            <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-orange-500">Registereintrag</h2>
+            <section className="mb-12">
+                <h2 className="mb-4 text-2xl font-extrabold text-alb-900 sm:text-3xl">Registereintrag</h2>
                 <p>Eingetragen im Vereinsregister</p>
                 <p>Registergericht: Amtsgericht Spaichingen</p>
                 <p>Registernummer: VR 195</p>
@@ -32,16 +39,16 @@ const Impressum = () => {
             </section>
 
             {/* Haftungsausschluss */}
-            <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-orange-500">Haftungsausschluss</h2>
+            <section className="mb-12">
+                <h2 className="mb-4 text-2xl font-extrabold text-alb-900 sm:text-3xl">Haftungsausschluss</h2>
 
-                <h3 className="text-xl font-semibold mt-4 mb-2">1. Inhalt des Onlineangebotes</h3>
+                <h3 className="mb-2 mt-6 text-xl font-bold text-alb-900">1. Inhalt des Onlineangebotes</h3>
                 <p className="mb-4">
                     Der Verein übernimmt keinerlei Gewähr für die Aktualität, Korrektheit, Vollständigkeit oder Qualität der
                     bereitgestellten Informationen.
                 </p>
 
-                <h3 className="text-xl font-semibold mt-4 mb-2">2. Verweise und Links</h3>
+                <h3 className="mb-2 mt-6 text-xl font-bold text-alb-900">2. Verweise und Links</h3>
                 <p className="mb-4">
                     Für direkte oder indirekte Verweise auf fremde Webseiten (Hyperlinks), die außerhalb des Verantwortungsbereiches
                     des Vereins liegen, würde eine Haftungsverpflichtung ausschließlich in dem Fall in Kraft treten, in dem der Verein
@@ -56,7 +63,7 @@ const Impressum = () => {
                     verändert wurden.
                 </p>
 
-                <h3 className="text-xl font-semibold mt-4 mb-2">3. Urheber- und Kennzeichenrecht</h3>
+                <h3 className="mb-2 mt-6 text-xl font-bold text-alb-900">3. Urheber- und Kennzeichenrecht</h3>
                 <p className="mb-4">
                     Alle auf dieser Website veröffentlichten Inhalte (Texte, Bilder, Grafiken, Logos) unterliegen dem deutschen
                     Urheberrecht. Jede vom deutschen Urheberrecht nicht zugelassene Verwertung bedarf vorheriger schriftlicher
@@ -66,12 +73,12 @@ const Impressum = () => {
 
             {/* Streitbeilegung */}
             <section>
-                <h2 className="text-2xl font-semibold mb-4 text-orange-500">Streitbeilegung</h2>
+                <h2 className="mb-4 text-2xl font-extrabold text-alb-900 sm:text-3xl">Streitbeilegung</h2>
                 <p className="mb-4">
                     Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:
                     <a
                         href="https://ec.europa.eu/consumers/odr"
-                        className="text-orange-500 hover:underline ml-1"
+                        className="text-brand-600 hover:underline ml-1"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
@@ -85,7 +92,7 @@ const Impressum = () => {
             </section>
 
             {/* Werbung für mich */}
-            <div className="mt-8 py-4 border-t text-sm text-gray-500">
+            <div className="mt-12 border-t border-slate-200 py-4 text-sm text-slate-500">
                 <p>Diese Webseite wurde von Samuel Meßmer Designed und selbstständig programmiert. </p>
                 <Link
                     href={"https://github.com/samuelmessmer"}
@@ -99,8 +106,9 @@ const Impressum = () => {
             </div>
 
             {/* Aktualitätshinweis */}
-            <div className="pt-4 border-t text-sm text-gray-500">
+            <div className="border-t border-slate-200 pt-4 text-sm text-slate-500">
                 <p>Dieses Impressum wurde zuletzt aktualisiert am 01. Januar 2024</p>
+            </div>
             </div>
         </div>
     );

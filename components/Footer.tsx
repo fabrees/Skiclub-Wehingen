@@ -1,20 +1,76 @@
+"use client";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { useDocumentLink } from "@/lib/useDocumentLink";
+import {
+  LINK_ID,
+  LOIPE_URL,
+  VORSTAND_MAIL,
+  WHATSAPP_SKILIFT_URL,
+} from "@/lib/verein";
+
+const linkClass = "hover:text-white transition";
 
 const Footer = () => {
-  return (
-    <div className="bg-slate-700 flex justify-between items-center py-8 px-6 text-white z-10">
-      <p>&copy;Design Required for Terms</p>
+  const beitrittLink = useDocumentLink(LINK_ID.beitrittserklaerung);
 
-      <div className="flex flex-col gap-2 sm:flex-row sm:gap-10">
-        <Link href="/impressum">
-          <p>Impressum</p>
-        </Link>
-        <Link href="/datenschutz">
-          <p>Datenschutz</p>
-        </Link>
+  return (
+    <footer className="bg-alb-900 text-sm text-alb-100/80">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
+        <div>
+          <Image
+            src="/Logo.gif"
+            alt="Logo Skiclub Wehingen"
+            width={81}
+            height={48}
+            className="h-12 w-auto rounded-lg bg-white p-1"
+            unoptimized
+          />
+          <p className="mt-4">
+            Skiclub Wehingen e.V. – Traditionsverein auf dem Heuberg mit
+            Skilift, Skihütte, Fossiliuslauf und MTB-Trail.
+          </p>
+        </div>
+
+        <div>
+          <p className="eyebrow text-white">Entdecken</p>
+          <ul className="mt-4 space-y-2">
+            <li><Link href="/fossiliuslauf" className={linkClass}>Fossiliuslauf</Link></li>
+            <li><Link href="/mtb-trail" className={linkClass}>MTB-Trail</Link></li>
+            <li><Link href="/mieten" className={linkClass}>Skihütte mieten</Link></li>
+            <li><Link href="/newsletter" className={linkClass}>Neuigkeiten</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <p className="eyebrow text-white">Kontakt &amp; Aktuelles</p>
+          <ul className="mt-4 space-y-2">
+            <li><a href={`mailto:${VORSTAND_MAIL}`} className={linkClass}>{VORSTAND_MAIL}</a></li>
+            <li><a href={WHATSAPP_SKILIFT_URL} target="_blank" rel="noopener noreferrer" className={linkClass}>WhatsApp-Kanal Skilift</a></li>
+            <li><a href={LOIPE_URL} target="_blank" rel="noopener noreferrer" className={linkClass}>Loipenbericht Heuberg</a></li>
+            <li>Skilift: Wehingersteige, 2. Kurve</li>
+          </ul>
+        </div>
+
+        <div>
+          <p className="eyebrow text-white">Verein</p>
+          <ul className="mt-4 space-y-2">
+            <li><Link href="/verein" className={linkClass}>Über uns</Link></li>
+            <li><a href={beitrittLink} target="_blank" rel="noopener noreferrer" className={linkClass}>Mitglied werden</a></li>
+            <li><Link href="/impressum" className={linkClass}>Impressum</Link></li>
+            <li><Link href="/datenschutz" className={linkClass}>Datenschutz</Link></li>
+          </ul>
+        </div>
       </div>
-    </div>
+
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-2 px-4 py-5 text-xs sm:px-6">
+          <p>&copy; {new Date().getFullYear()} Skiclub Wehingen e.V.</p>
+          <Link href="/mtb-trail" className={linkClass}>Mit Unterstützung unserer Sponsoren</Link>
+        </div>
+      </div>
+    </footer>
   );
 };
 

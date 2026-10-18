@@ -113,12 +113,12 @@ const EditBlog = () => {
   if (!blog) {
     return (
       <div className="flex flex-col justify-center items-center h-screen">
-        <SyncLoader className="mb-12" color="#f97316" loading={true} speedMultiplier={0.5} />
+        <SyncLoader className="mb-12" color="#1279BF" loading={true} speedMultiplier={0.5} />
         <p>
           Blog wird geladen...
         </p>
         <Link href="/admin">
-          <Button className="bg-orange-500 hover:bg-orange-600 hover:scale-105 transition duration-200 shadow-md font-bold text-white border-2 border-orange-500 mt-12">
+          <Button className="bg-brand-500 hover:bg-brand-600 hover:scale-105 transition duration-200 shadow-md font-bold text-white border-2 border-brand-500 mt-12">
             Erneut versuchen
           </Button>
         </Link>

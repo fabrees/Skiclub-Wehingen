@@ -1,6 +1,4 @@
 import {nextui} from '@nextui-org/theme';
-import { animate } from 'framer-motion';
-import { stringify } from 'querystring';
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -17,7 +15,29 @@ const config: Config = {
 			'md': '882px',
 			// => @media (min-width: 992px) { ... }
 		  },
+  		fontFamily: {
+  			sans: ['var(--font-nunito)', 'system-ui', 'sans-serif']
+  		},
   		colors: {
+  			// Vereinsfarben: Gletscherblau (Akzent), Alb-Blau (Struktur), Tannengrün (Sommer)
+  			brand: {
+  				'50': '#EAF4FB',
+  				'100': '#CDE6F6',
+  				'500': '#1279BF',
+  				'600': '#0D63A0',
+  				'700': '#0A4D7D'
+  			},
+  			alb: {
+  				'50': '#F3F7FB',
+  				'100': '#E3EDF6',
+  				'600': '#2F5B85',
+  				'800': '#1D3A57',
+  				'900': '#14283D'
+  			},
+  			tanne: {
+  				'50': '#EEF6EF',
+  				'500': '#3E8E52'
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

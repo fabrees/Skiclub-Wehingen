@@ -1,228 +1,275 @@
-"use client";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Image from "next/image";
-import React from "react";
+import { Metadata } from "next";
+import { CalendarDays, Clock, MapPin, Trophy } from "lucide-react";
 import HoverButton from "@/components/HoverButton";
 import Sprinter from "@/components/Sprinter";
+import MapConsent from "@/components/MapConsent";
+import { naechsterFossiliuslauf } from "@/lib/verein";
+import {
+  ANMELDUNG_URL,
+  ERGEBNISSE_URL,
+  Gruppe,
+  LAEUFE,
+  MAPS_EMBED_URL,
+  MAPS_LINK_URL,
+} from "@/lib/fossiliuslauf";
+
+// Stündlich neu rendern, damit das Datum des nächsten Laufs aktuell bleibt
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: "Fossiliuslauf – Skiclub Wehingen",
+  description:
+    "Alle Infos zum Fossiliuslauf in Wehingen: Termin, Zeitplan, Strecken, Startgeld, Anmeldung und Ergebnisse.",
+};
+
+const gruppen: {
+  gruppe: Gruppe;
+  titel: string;
+  img: string;
+  text: string;
+  akzent: string;
+}[] = [
+  {
+    gruppe: "Erwachsene",
+    titel: "Lauf für Erwachsene",
+    img: "/lauf-erwachsen.png",
+    text: "Für alle ab 15 Jahren: der anspruchsvolle Hauptlauf, der Jedermannlauf für Genießer und eine Nordic-Walking-Strecke.",
+    akzent: "bg-brand-50 text-brand-700",
+  },
+  {
+    gruppe: "Jugendliche",
+    titel: "Lauf für Jugendliche",
+    img: "/lauf-jung.png",
+    text: "Der Schülerlauf führt je nach Alter über 1,5 km (8–11 Jahre) oder 3,0 km (12–15 Jahre).",
+    akzent: "bg-tanne-50 text-tanne-500",
+  },
+  {
+    gruppe: "Kinder",
+    titel: "Lauf für Kinder",
+    img: "/lauf-kinder.png",
+    text: "Bambini (2–4 Jahre) und Kids (5–7 Jahre) laufen kostenlos – der erste Wettkampf mit Zuschauern am Streckenrand.",
+    akzent: "bg-alb-100 text-alb-600",
+  },
+];
 
 const Fossiliuslauf = () => {
+  const datum = naechsterFossiliuslauf().toLocaleDateString("de-DE", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
   return (
-    <div className="relative">
+    <div>
       <HoverButton />
-      <section>
-        <div className="flex flex-col items-center mt-24 mb-4 sm:mb-32">
-          <p className="text-orange-500 text-lg sm:text-2xl self-start ml-4 -mb-4 md:mb-1 md:self-auto">
-            Hier finden Sie alle Infos zum
-          </p>
-          <h1 className="font-extrabold text-[52px] sm:text-8xl sm1 xl:text-9xl tracking-tighter mb-5 sm:mb-4 z-10">
-            Fossiliuslauf
-          </h1>
-          <p className="text-orange-500 text-lg sm:text-2xl self-start ml-4 -mb-4 md:mb-1 md:self-auto">
-            am Sonntag, den 27.09.2026
-          </p>
+
+      {/* SEITENKOPF */}
+      <section className="bg-alb-50">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[1fr_auto]">
+          <div>
+            <p className="eyebrow text-brand-600">Seit 1985 · Teil des Silberdistel-Alb-Cups</p>
+            <h1 className="mt-3 text-4xl font-extrabold text-alb-900 sm:text-5xl">
+              Fossiliuslauf
+            </h1>
+            <p className="mt-3 text-xl font-semibold text-alb-600">
+              „Laufen, wo die Alb am höchsten ist“
+            </p>
+            <p className="mt-5 max-w-2xl text-lg leading-relaxed">
+              Weil 1985 der Schnee ausblieb, veranstaltete der Skiclub am 6.
+              Oktober kurzerhand ein Familiensportfest – mit über 150
+              Teilnehmenden. Seitdem findet der Fossiliuslauf jedes Jahr am
+              letzten Septembersonntag statt.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href={ANMELDUNG_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full bg-brand-500 px-6 py-3 font-bold text-white shadow hover:bg-brand-600"
+              >
+                Jetzt anmelden
+              </a>
+              <a
+                href="#zeitplan"
+                className="rounded-full bg-white px-6 py-3 font-bold text-alb-900 ring-1 ring-slate-300 hover:ring-brand-500"
+              >
+                Zeitplan &amp; Startgeld
+              </a>
+            </div>
+          </div>
+
+          <dl className="grid gap-4 rounded-3xl bg-white p-6 shadow-xl ring-1 ring-slate-200 sm:grid-cols-2 lg:w-[380px] lg:grid-cols-1">
+            <div className="flex gap-4">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-brand-100 text-brand-600">
+                <CalendarDays className="h-5 w-5" />
+              </span>
+              <div>
+                <dt className="text-sm text-slate-500">Nächster Termin</dt>
+                <dd className="font-bold text-alb-900">{datum}</dd>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-alb-100 text-alb-600">
+                <Clock className="h-5 w-5" />
+              </span>
+              <div>
+                <dt className="text-sm text-slate-500">Starts</dt>
+                <dd className="font-bold text-alb-900">ab 09:30 Uhr · Hauptlauf 11:00 Uhr</dd>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-tanne-50 text-tanne-500">
+                <MapPin className="h-5 w-5" />
+              </span>
+              <div>
+                <dt className="text-sm text-slate-500">Ort</dt>
+                <dd className="font-bold text-alb-900">
+                  Skiclub Wehingen ·{" "}
+                  <a href="#anfahrt" className="text-brand-600 hover:underline">Anfahrt</a>
+                </dd>
+              </div>
+            </div>
+          </dl>
         </div>
       </section>
 
-      {/* BLOG SECTION */}
-      <section>
-        <div className="bg-white mt-10">
-          <div className="flex flex-col sticky top-24">
-            <Card className="bg-sky-100 mb-24 mx-4 sm:p-5 lg:mx-20 xl:mx-20 2xl:pl-20 flex flex-col items-center xl:flex-row xl:justify-between xl:items-center animate-zoom zoom">
-              <Image
-                src="/lauf-erwachsen.png"
-                alt="Bild groß"
-                width={1920}
-                height={1080}
-                className="hidden sm:block rounded-xl shadow-xl sm:min-h-xl sm:min-w-xl md:mt-0 md:mx-5 lg:my-5 lg:h-[500px] lg:w-[720px]"
-              />
-              <div className="sm:text-center md:text-left md:">
-                <CardHeader className="font-bold text-3xl lg:text-5xl -ml-2 text-orange-500">
-                  Lauf für Erwachsene
-                </CardHeader>
-                <CardContent className="mb-4 sm:mb-0">
-                  Für Erwachsene (ab 15 Jahren) gibt es die folgenden Läufe:
-                  <br />
-                  <b>
-                    <br />- Hauptlauf 11,2 km
-                    <br />- Jedermannlauf 6,0 km
-                    <br />- Nordic-Walking 7,8 km
-                  </b>
-                </CardContent>
-                <CardContent className="font-bold text-lg text-orange-500">
-                  Weiter Infos:
-                </CardContent>
-                {/* <CardContent className="lg:-mt-4 mb-20 text-lg sm:mb-4">
-                  Alle drei Läufe beginnen um 11:00 Uhr. Für den Jedermannlauf
-                  und das Nordic Walking beträgt das Startgeld 6,00 €, während
-                  für den Hauptlauf ein Startgeld von 8,00 € anfällt.
-                </CardContent> */}
-                <CardContent  className="lg:-mt-4 mb-20 text-lg sm:mb-4">
-                  Der Hauptlauf mit 11,2 Kilometer beginnt um 11:00 Uhr, Jedermann mit 6,0 Kilometer
-                  und Nordic-Walking mit 8,0 Kilometer starten jeweils um 11:10 Uhr. Das Startgeld
-                  für den Hauptlauf beträgt 8,00€, das Startgeld für die beiden anderen Läufe
-                  liegt bei 6,00€.
-                </CardContent>
-              </div>
-            </Card>
-            <Image
-              src="/lauf-erwachsen.png"
-              alt="Bild klein"
-              width={1920}
-              height={1080}
-              className="z-20 self-start rounded-xl shadow-xl h-[130px] w-[240px] sm:hidden mb-5 -mt-44 sm:-mt-80 mx-1"
-            />
-          </div>
+      {/* ZEITPLAN */}
+      <section id="zeitplan" className="mx-auto max-w-7xl scroll-mt-24 px-4 py-16 sm:px-6 sm:py-20">
+        <p className="eyebrow text-brand-600">Auf einen Blick</p>
+        <h2 className="mt-3 text-3xl font-extrabold text-alb-900 sm:text-4xl">
+          Zeitplan, Strecken &amp; Startgeld
+        </h2>
 
-          <div className="flex flex-col sticky top-24 bg-white">
-            <Card className="bg-orange-500  mb-24 mx-4 sm:p-5 lg:mx-20 xl:mx-20 2xl:pl-20 flex flex-col items-center xl:flex-row xl:justify-between xl:items-center animate-zoom zoom">
-              <Image
-                src="/lauf-jung.png"
-                alt="Bild mittel klein"
-                width={1920}
-                height={1080}
-                className="hidden sm:block md:hidden rounded-xl shadow-xl md:mt-0 md:mx-5 lg:my-5 lg:h-[500px] lg:w-[720px]"
-              />
-              <div className="sm:text-center md:text-left md:">
-                <CardHeader className="font-bold text-3xl lg:text-5xl -ml-2 text-white">
-                  Lauf für Jugendliche
-                </CardHeader>
-                <CardContent className="mb-2 sm:mb-0">
-                  <b>
-                    <br />- Schülerlauf 1,5 km
-                    <br />- Schülerlauf 3,0 km
-                  </b>
-                </CardContent>
-                <CardContent className="mb-14 sm:mb-0">
-                  Der Schülerlauf startet um 10:00 Uhr und führt über eine
-                  Strecke von 1,5 km bzw 3,0 km. Die jüngeren Schüler zwischen
-                  8 und 11 Jahren laufen die 1,5 km. Die älteren Schüler zwischen
-                  12 un 15 Jahren laufen 3,0 km. Es fällt ein Startgeld von 4,00 € an.
-                </CardContent>
-              </div>
-              <Image
-                src="/lauf-jung.png"
-                alt="Bild groß"
-                width={1920}
-                height={1080}
-                className="hidden md:block rounded-xl shadow-xl mt-12 md:mt-0 md:mx-5 lg:my-5 lg:h-[500px] lg:w-[720px]"
-              />
-            </Card>
-            <Image
-              src="/lauf-jung.png"
-              alt="Bild ganz klein unten links"
-              width={1920}
-              height={1080}
-              className="z-20 self-end rounded-xl shadow-xl h-[130px] w-[240px] sm:hidden mb-14 -mt-40 sm:-mt-80 mx-1"
-            />
-          </div>
+        {/* Desktop: Tabelle */}
+        <div className="mt-8 hidden overflow-hidden rounded-2xl ring-1 ring-slate-200 sm:block">
+          <table className="w-full text-left">
+            <thead className="bg-alb-900 text-sm text-white">
+              <tr>
+                <th className="px-5 py-3 font-bold">Start</th>
+                <th className="px-5 py-3 font-bold">Lauf</th>
+                <th className="px-5 py-3 font-bold">Alter</th>
+                <th className="px-5 py-3 font-bold">Strecke</th>
+                <th className="px-5 py-3 text-right font-bold">Startgeld</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 text-lg">
+              {LAEUFE.map((lauf) => (
+                <tr key={`${lauf.name}-${lauf.strecke}`} className="even:bg-alb-50">
+                  <td className="px-5 py-4 font-bold text-alb-900">{lauf.start} Uhr</td>
+                  <td className="px-5 py-4 font-bold text-alb-900">{lauf.name}</td>
+                  <td className="px-5 py-4">{lauf.alter}</td>
+                  <td className="px-5 py-4">{lauf.strecke}</td>
+                  <td className="px-5 py-4 text-right">{lauf.startgeld}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-          <div className="flex flex-col sticky top-24 bg-white">
-            <Card className="bg-slate-700  mb-24 mx-4 sm:p-5 lg:mx-20 xl:mx-20 2xl:pl-20 flex flex-col items-center xl:flex-row xl:justify-between xl:items-center animate-zoom zoom">
-              <Image
-                src="/lauf-kinder.png"
-                alt="Bild groß"
-                width={1920}
-                height={1080}
-                className="hidden sm:block rounded-xl shadow-xl md:mt-0 md:mx-5 lg:my-5 lg:h-[500px] lg:w-[720px]"
-              />
-              <div className="sm:text-center md:text-left md:">
-                <CardHeader className="font-bold text-3xl lg:text-5xl -ml-2 text-orange-500">
-                  Lauf für Kinder
-                </CardHeader>
-                <CardContent className="mb-2 sm:mb-0 text-white">
-                  <b>
-                    <br />- Bambinilauf 100 m
-                    <br />- Kidslauf 300 m
-                  </b>
-                </CardContent>
-                <CardContent className="font-bold text-lg text-orange-500">
-                  Weiter Infos:
-                </CardContent>
-                <CardContent className="mb-14 sm:mb-0 text-white">
-                  Der Bambinilauf beginnt um 09:30 Uhr und führt über eine
-                  Strecke von 100 Metern. Die Teilnahme ist kostenlos und steht
-                  allen Kindern von 2 bis 4 Jahren offen. Im Anschluss
-                  startet um 09:45 Uhr der Kidslauf, der eine Distanz von 300
-                  Metern umfasst. Auch hier ist die Teilnahme kostenlos, und es
-                  dürfen Kinder zwischen 5 und 7 Jahren mitmachen.
-                </CardContent>
-              </div>
-            </Card>
-            <Image
-              src="/lauf-kinder.png"
-              alt="Bild kleinj"
-              width={1920}
-              height={1080}
-              className="z-20 self-start rounded-xl shadow-xl h-[130px] w-[240px] sm:hidden mb-5 -mt-36 sm:-mt-80 mx-1"
-            />
+        {/* Mobil: Karten */}
+        <ul className="mt-8 space-y-3 sm:hidden">
+          {LAEUFE.map((lauf) => (
+            <li
+              key={`${lauf.name}-${lauf.strecke}`}
+              className="flex items-center gap-4 rounded-2xl bg-alb-50 p-4"
+            >
+              <span className="w-14 shrink-0 text-lg font-extrabold text-alb-900">{lauf.start}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-bold text-alb-900">
+                  {lauf.name} · {lauf.strecke}
+                </span>
+                <span className="block text-sm text-slate-500">{lauf.alter}</span>
+              </span>
+              <span className="shrink-0 text-sm font-bold">{lauf.startgeld}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* LÄUFE NACH ALTERSGRUPPE */}
+      <section className="bg-alb-50">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
+          <p className="eyebrow text-brand-600">Für jedes Alter</p>
+          <h2 className="mt-3 text-3xl font-extrabold text-alb-900 sm:text-4xl">Die Läufe</h2>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {gruppen.map((g) => (
+              <article key={g.gruppe} className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+                <div className="relative aspect-[4/3]">
+                  <Image
+                    src={g.img}
+                    alt={g.titel}
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-extrabold text-alb-900 sm:text-2xl">{g.titel}</h3>
+                  <p className="mt-2 leading-relaxed">{g.text}</p>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {LAEUFE.filter((l) => l.gruppe === g.gruppe).map((l) => (
+                      <li
+                        key={`${l.name}-${l.strecke}`}
+                        className={`rounded-full px-3 py-1 text-sm font-bold ${g.akzent}`}
+                      >
+                        {l.name} {l.strecke}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ERGEBNISS SECTION */}
-      <section>
-        <h1 className=" font-extrabold text-5xl sm:text-8xl sm1 xl:text-9xl tracking-tighter mb-5 sm:mb-4 z-10 md:mt-14  mx-8">
-          Die Ergebnisse:
-        </h1>
-        <div className="flex justify-end items-center lg:mx-14">
-          <Sprinter className="hidden xl:block w-[550px] h-fit z-0" />
+      {/* ERGEBNISSE */}
+      <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-2">
+        <Sprinter className="mx-auto hidden h-auto w-full max-w-md lg:block" />
+        <div>
+          <p className="eyebrow text-brand-600">Ergebnisse</p>
+          <h2 className="mt-3 text-3xl font-extrabold text-alb-900 sm:text-4xl">
+            Ergebnisse &amp; Urkunden
+          </h2>
+          <p className="mt-4 max-w-xl text-lg leading-relaxed">
+            Alle Ergebnislisten des Fossiliuslaufs – vom Bambinilauf bis zum
+            Hauptlauf – finden Sie live und übersichtlich bei raceresult.
+          </p>
           <a
-            href="https://my.raceresult.com/385773/results#0_8AF0E5"
+            href={ERGEBNISSE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group mx-4 my-8 w-full max-w-xl"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand-500 px-6 py-3 font-bold text-white shadow hover:bg-brand-600"
           >
-            <Card className="relative overflow-hidden bg-gradient-to-br from-sky-100 via-white to-orange-100 p-6 sm:p-10 rounded-2xl shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
-              <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full bg-orange-500/20 blur-2xl" />
-              <div className="relative flex items-center gap-4 mb-6">
-                <Image
-                  src="/favicon-skiclub.png"
-                  alt="Logo Skiclub Wehingen"
-                  width={80}
-                  height={80}
-                  className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-white p-1 shadow-md"
-                />
-                <span className="text-3xl font-light text-slate-400">×</span>
-                <span className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-                  <span className="text-slate-700">race</span>
-                  <span className="text-orange-500">|</span>
-                  <span className="text-slate-700">result</span>
-                </span>
-              </div>
-              <h2 className="relative font-bold text-3xl lg:text-4xl text-orange-500 mb-3">
-                Ergebnisse &amp; Urkunden
-              </h2>
-              <p className="relative text-lg text-slate-700 mb-8">
-                Alle Ergebnislisten des Fossiliuslaufs – vom Bambinilauf bis zum
-                Hauptlauf – finden Sie live und übersichtlich bei raceresult.
-              </p>
-              <span className="relative inline-flex items-center gap-3 rounded-full bg-orange-500 px-6 py-3 text-lg font-semibold text-white shadow-md transition-colors duration-300 group-hover:bg-slate-700">
-                Zu den Ergebnissen
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </span>
-            </Card>
+            <Trophy className="h-5 w-5" />
+            Zu den Ergebnissen
           </a>
         </div>
       </section>
 
-      {/* GOOGLE MAPS LINK */}
-      <section>
-        <div className="flex justify-end sm:mb-12">
-          <h1 className=" font-extrabold text-5xl sm:text-8xl sm1 xl:text-9xl tracking-tighter mb-4 z-10 md:mt-14 mx-8">
-            Wo Sie uns finden!
-          </h1>
-        </div>
-
-        <div className="flex justify-center md:justify-normal mx-2">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.4017924368036!2d8.799015413264739!3d48.137411173294836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479a0a1929c634f5%3A0xd2d041efc37a1a32!2sSkiclub%20Wehingen%20e.V.!5e0!3m2!1sde!2sde!4v1728588872095!5m2!1sde!2sde"
-            width="80"
-            height="600"
-            className="border-none w-[450px] sm:w-[700px] lg:w-[1300px] rounded-md shadow-xl hover:scale-105 duration-150 sm:mx-10 lg:ml-40 mb-12"
-            loading="lazy"
-          ></iframe>
+      {/* ANFAHRT */}
+      <section id="anfahrt" className="scroll-mt-24 bg-alb-50">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="eyebrow text-brand-600">Anfahrt</p>
+              <h2 className="mt-3 text-3xl font-extrabold text-alb-900 sm:text-4xl">
+                So finden Sie uns
+              </h2>
+            </div>
+            <a
+              href={MAPS_LINK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-alb-600 hover:text-brand-600"
+            >
+              In Google Maps öffnen →
+            </a>
+          </div>
+          <MapConsent src={MAPS_EMBED_URL} title="Karte: Skiclub Wehingen e.V." />
         </div>
       </section>
     </div>

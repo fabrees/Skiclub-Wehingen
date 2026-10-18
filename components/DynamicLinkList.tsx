@@ -42,7 +42,7 @@ export default function LaufListe() {
     ];
 
     return (
-        <div className="flex flex-col gap-5 sm:w-[600px] lg:w-[850px] bg-orange-500 p-8 mx-2 sm:m-12 rounded-md shadow-xl mb-12 w-full">
+        <div className="flex flex-col gap-5 sm:w-[600px] lg:w-[850px] bg-brand-500 p-8 mx-2 sm:m-12 rounded-md shadow-xl mb-12 w-full">
             {laufEvents.map((event, index) => {
                 //+1, weil ich die Daten in der Datenbank etwas
                 // umständlich gespeichert habe und der Mitgliedsantrag

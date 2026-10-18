@@ -149,7 +149,7 @@ const CreateBlog = () => {
                         <p className="text-red-500 mb-5 font-semibold">{error}</p>
                         <Link
                             href={"/"}
-                            className=" bg-orange-500 text-white font-semibold py-2 px-4 rounded-xl hover:bg-orange-600"
+                            className=" bg-brand-500 text-white font-semibold py-2 px-4 rounded-xl hover:bg-brand-600"
                         >
                             erneut versuchen
                         </Link>

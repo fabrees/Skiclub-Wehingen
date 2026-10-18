@@ -2,7 +2,7 @@ import React from "react";
 
 const SKIN = "#f1c7a3";
 const SKIN_BACK = "#d9a883";
-const SHIRT = "#f97316";
+const SHIRT = "#1279BF";
 const SHORTS = "#334155";
 const SHOES = "#0f172a";
 const SHOES_BACK = "#1e293b";
@@ -91,7 +91,7 @@ const Sprinter = ({ className }: { className?: string }) => (
     <g className="sprinter">
       <ellipse className="shadow" cx={200} cy={362} rx={95} ry={12} fill="#94a3b8" />
 
-      <g className="speed" stroke="#fdba74" strokeWidth={6} strokeLinecap="round">
+      <g className="speed" stroke="#7FB8E0" strokeWidth={6} strokeLinecap="round">
         <line x1={80} y1={150} x2={130} y2={150} />
         <line x1={60} y1={200} x2={120} y2={200} />
         <line x1={90} y1={250} x2={135} y2={250} />

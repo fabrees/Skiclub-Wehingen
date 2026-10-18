@@ -1,13 +1,15 @@
-import Link from "next/link";
+import { ANMELDUNG_URL } from "@/lib/fossiliuslauf";
 
+// Schwebender Anmelde-Button auf der Fossiliuslauf-Seite
 export default function HoverButton() {
     return (
-        <div className="fixed left-3 bottom-10 sm:left-8 sm:bottom-10 z-50">
-            <Link target="_blank" href="http://www.fossiliuslauf.sc-wehingen.de/anmeldung/anmeldung-2026.html">
-                <div className="px-7 py-4  w-fit border-2 rounded-full shadow-2xl bg-orange-500  hover:bg-orange-600 hover:scale-105 duration-200">
-                    <h1 className=" text-white text-xl font-bold"><span className="hidden sm:inline-block">HIER</span> ANMELDEN</h1>
-                </div>
-            </Link>
-        </div>
+        <a
+            href={ANMELDUNG_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fixed bottom-4 right-4 z-40 rounded-full bg-brand-500 px-5 py-3 font-bold text-white shadow-xl ring-4 ring-white transition hover:bg-brand-600 sm:bottom-8 sm:right-8 sm:px-7 sm:py-4 sm:text-lg"
+        >
+            <span className="hidden sm:inline">Jetzt </span>anmelden
+        </a>
     );
 }

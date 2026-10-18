@@ -1,202 +1,185 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { useEffect, useState, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import { useDocumentLink } from "@/lib/useDocumentLink";
+import {
+  LINK_ID,
+  LOIPE_URL,
+  NAV_ITEMS,
+  WHATSAPP_SKILIFT_URL,
+} from "@/lib/verein";
+
+const StatusDot = () => (
+  <span className="relative flex h-2.5 w-2.5 shrink-0">
+    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-60" />
+    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-400" />
+  </span>
+);
+
+const TopBar = () => (
+  <div className="bg-alb-900 text-sm text-alb-100">
+    <div className="mx-auto flex h-10 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+      <a
+        href={WHATSAPP_SKILIFT_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex min-w-0 items-center gap-2 hover:text-white"
+      >
+        <StatusDot />
+        <span className="truncate">
+          <span className="sm:hidden">Skilift aktuell</span>
+          <span className="hidden sm:inline">
+            Skilift aktuell: Infos zum Betrieb im WhatsApp-Kanal
+          </span>
+        </span>
+      </a>
+      <a
+        href={LOIPE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex min-w-0 items-center gap-2 hover:text-white"
+      >
+        <StatusDot />
+        <span className="truncate">
+          <span className="sm:hidden">Loipe aktuell</span>
+          <span className="hidden sm:inline">
+            Loipe aktuell: Spurzustand &amp; Infos
+          </span>
+        </span>
+      </a>
+    </div>
+  </div>
+);
 
 const NavBar = () => {
-  const [Display, setDisplay] = useState(false);
-  const [link, setLink] = useState("");
-
-  const showHamburgerMenu = () => {
-    setDisplay(!Display);
-  };
+  const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const beitrittLink = useDocumentLink(LINK_ID.beitrittserklaerung);
 
   //to close the Hamburger Menu when clicking on the other contant of the Page
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handler = (event: MouseEvent) => {
-      // Überprüfe, ob der Klick außerhalb des Menü-Elements passiert ist
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setDisplay(false);
+        setMenuOpen(false);
       }
     };
 
-    // Füge den Event-Listener hinzu
     document.addEventListener("mousedown", handler);
-
-    // Cleanup-Effekt: Entferne den Event-Listener beim Unmount
-    return () => {
-      document.removeEventListener("mousedown", handler);
-    };
-  }, []); // Leer lassen, damit es nur einmal ausgeführt wird
-
-  async function fetchPDFLink() {
-    const response = await fetch("/api/link/1");
-
-    if (!response.ok) {
-      console.error("Fehler beim Abrufen des Links", response.status);
-      return;
-    }
-
-    const data = await response.json();
-    console.log(data.document);
-    setLink(data.document);
-  };
-
-  useEffect(() => {
-    fetchPDFLink();
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  useEffect(() => setMenuOpen(false), [pathname]);
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <div className="sticky top-0 flex justify-between items-center pl-2  sm:py-2 sm:px-8 w-full h-20 border-b-2 shadow-md bg-white z-50">
-      <Link href="/" className="hover:scale-110 transition duration-300">
-        <Image src="/Logo.gif" alt="Logo Picture" width={100} height={50} />
-      </Link>
+    <>
+      <TopBar />
 
-      {/* MOBILE DESIGN */}
-      <div className="sm:hidden" ref={menuRef}>
-        <button onClick={showHamburgerMenu}>
-          <Image
-            src="/hamburgerMenu.jpg"
-            alt="Hamburger Menu"
-            width={120}
-            height={120}
-          />
-        </button>
+      <header
+        ref={menuRef}
+        className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur"
+      >
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
+          <Link href="/" className="flex items-center gap-3">
+            <Image
+              src="/Logo.gif"
+              alt="Logo Skiclub Wehingen"
+              width={81}
+              height={48}
+              className="h-12 w-auto"
+              unoptimized
+            />
+            <span className="hidden leading-tight lg:block">
+              <span className="block font-extrabold text-alb-900">
+                Skiclub Wehingen
+              </span>
+              <span className="block text-xs text-slate-500">e.V. · Heuberg</span>
+            </span>
+          </Link>
 
+          {/* DESKTOP */}
+          <nav className="hidden items-center gap-1 text-[15px] font-semibold text-alb-900 md:flex">
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`rounded-lg px-3 py-2 transition ${
+                  isActive(item.href)
+                    ? "bg-brand-50 text-brand-600"
+                    : "hover:bg-alb-50"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <a
+              href={beitrittLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-3 rounded-full bg-brand-500 px-5 py-2.5 text-white shadow-sm transition hover:bg-brand-600"
+            >
+              Mitglied werden
+            </a>
+          </nav>
+
+          {/* MOBILE */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="rounded-lg p-2 text-alb-900 hover:bg-alb-50 md:hidden"
+            aria-label={menuOpen ? "Menü schließen" : "Menü öffnen"}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+          </button>
+        </div>
 
         <AnimatePresence>
-          {Display && (
-            <motion.div
+          {menuOpen && (
+            <motion.nav
               key="menu"
-              initial={{ opacity: 0, y: -200 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -200 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25 }}
+              className="overflow-hidden border-t border-slate-200 bg-white md:hidden"
             >
-              {/* <div className="absolute right-1 w-44 rounded-lg bg-orange-500 px-5 py-4 z-auto animate-slideInFromTop slideInFromTop duration-500"> */}
-              <div className="absolute right-1 w-44 rounded-lg bg-orange-500 px-5 py-4 z-auto ">
-                <div className="flex flex-col justify-start text-white font-bold">
-                  <Link href="/" className={"py-3 px-3"} onClick={showHamburgerMenu}>
-                    Startseite
-                  </Link>
-                  <Link href="/fossiliuslauf" className="py-3 px-3" onClick={showHamburgerMenu}>
-                    Fossiliuslauf
-                  </Link>
-                  <Link href="/mtb-trail" className="py-3 px-3" onClick={showHamburgerMenu}>
-                    MTB-Trail
-                  </Link>
-                  <Link href="/newsletter" className="py-3  px-3" onClick={showHamburgerMenu}>
-                    Newsletter
-                  </Link>
-                  <Link href="/verein" className="py-3  px-3" onClick={showHamburgerMenu}>
-                    Verein
-                  </Link>
-
+              <div className="flex flex-col gap-1 px-4 py-4 font-semibold text-alb-900">
+                {NAV_ITEMS.map((item) => (
                   <Link
-                    href={link}
-                    target={"_blank"}
-                    rel="noopener noreferrer"
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`rounded-lg px-3 py-3 ${
+                      isActive(item.href)
+                        ? "bg-brand-50 text-brand-600"
+                        : "hover:bg-alb-50"
+                    }`}
                   >
-                    <Button className="bg-white  hover:bg-gray-100 shadow-md">
-                      <span className="font-bold text-black shadow-sm">
-                        Mitglied werden
-                      </span>
-                    </Button>
+                    {item.label}
                   </Link>
-                </div>
+                ))}
+                <a
+                  href={beitrittLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 rounded-full bg-brand-500 px-5 py-3 text-center text-white hover:bg-brand-600"
+                >
+                  Mitglied werden
+                </a>
               </div>
-            </motion.div>
+            </motion.nav>
           )}
         </AnimatePresence>
-
-
-        {/* <div className={Display ? "block" : "hidden duration-150"}>
-        <div className="absolute right-1 w-44 rounded-lg bg-orange-500 px-5 py-4 z-auto animate-slideInFromTop slideInFromTop duration-500">
-          <div className="flex flex-col justify-start text-white font-bold">
-            <Link href="/" className={"py-3 px-3"} onClick={showHamburgerMenu}>
-              Startseite
-            </Link>
-            <Link href="/fossiliuslauf" className="py-3 px-3" onClick={showHamburgerMenu}>
-              Fossiliuslauf
-            </Link>
-            <Link href="/newsletter" className="py-3  px-3" onClick={showHamburgerMenu}>
-              Newsletter
-            </Link>
-            <Link href="/verein" className="py-3  px-3" onClick={showHamburgerMenu}>
-              Verein
-            </Link>
-
-            <a href={link}
-              target={"_blank"}
-              rel="noopener noreferrer"
-            >
-              <Button className="bg-white  hover:bg-gray-100 shadow-md">
-                <span className="font-bold text-black shadow-sm">
-                  Mitglied werden
-                </span>
-              </Button>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div> */}
-      </div>
-
-      {/* DESKTOP DESIGN */}
-      <div className="hidden sm:flex gap-8 h-fit ">
-        <button className="hover:border-b-4 border-orange-500 duration-150hover:scale-150 duration-150">
-          <Link href="/" className={"py-8"}>
-            Startseite
-          </Link>
-        </button>
-
-        <button className="hover:border-b-4 border-orange-500 duration-150hover:scale-150 duration-150">
-          <Link href="/fossiliuslauf" className="py-8">
-            Fossiliuslauf
-          </Link>
-        </button>
-
-        <button className="hover:border-b-4 border-orange-500 duration-150hover:scale-150 duration-150">
-          <Link href="/mtb-trail" className="py-8">
-            MTB-Trail
-          </Link>
-        </button>
-
-        <button
-          onClick={() => { }}
-          className="hover:border-b-4 border-orange-500 duration-150hover:scale-150 duration-150"
-        >
-          <Link href="/newsletter" className="py-8">
-            Newsletter
-          </Link>
-        </button>
-
-        <button
-          onClick={() => { }}
-          className="hover:border-b-4 border-orange-500 duration-150hover:scale-150 duration-150"
-        >
-          <Link href="/verein" className="py-8">
-            Verein
-          </Link>
-        </button>
-
-        <a href={link}
-          target={"_blank"}
-          rel="noopener noreferrer"
-        >
-          <Button className="bg-orange-500 items-cent hover:bg-orange-600 hover:scale-105 transition duration-200 shadow-md">
-            <span className="font-bold text-white shadow-sm">
-              Mitglied werden
-            </span>
-          </Button>
-        </a>
-      </div>
-    </div >
+      </header>
+    </>
   );
 };
 

@@ -54,7 +54,7 @@ export default function SignIn() {
                     <h1 className="self-start sm:self-center ml-2 font-extrabold text-[52px] sm:text-8xl sm1 xl:text-9xl tracking-tighter mb-0 sm:mb-4 z-10">
                         Admin Login
                     </h1>
-                    <p className="text-orange-500 text-lg sm:text-2xl mx-4 md:self-center md:mx-12 sm:text-center">
+                    <p className="text-brand-500 text-lg sm:text-2xl mx-4 md:self-center md:mx-12 sm:text-center">
                         Bitte melden Sie sich mit Ihren Administrator-Zugangsdaten an
                     </p>
                 </div>
@@ -63,7 +63,7 @@ export default function SignIn() {
             {/* LOGIN-FORMULAR */}
             <section>
                 <div className="flex flex-col sticky top-24 md:mx-40">
-                    <Card className="mb-5 md:mb-24 mx-4 md:mx-14 flex flex-col items-center md:items-center animate-zoom zoom shadow-xl bg-[#EFF7FF]">
+                    <Card className="mb-5 md:mb-24 mx-4 md:mx-14 flex flex-col items-center md:items-center animate-zoom zoom shadow-xl bg-alb-50">
                         <div className="w-full">
                             <CardHeader className="font-bold text-3xl lg:text-5xl -ml-2 mb-4 mt-12">
                                 Anmeldedaten eingeben:
@@ -87,7 +87,7 @@ export default function SignIn() {
                                             })}
                                             type="text"
                                             placeholder="Ihr Benutzername"
-                                            className={`p-2 border border-orange-200 rounded-xl w-full ${errors.username && "border-2 border-red-500"}`}
+                                            className={`p-2 border border-brand-100 rounded-xl w-full ${errors.username && "border-2 border-red-500"}`}
                                         />
                                         {errors.username && (
                                             <p className="font-light text-xs text-red-500">{`${errors.username?.message}`}</p>
@@ -110,7 +110,7 @@ export default function SignIn() {
                                                 })}
                                                 type={`${isPasswordVisible ? "text" : "password"}`}
                                                 placeholder="Ihr Passwort"
-                                                className={`p-2 border border-orange-200 rounded-xl w-full ${errors.password && "border-2 border-red-500"}`}
+                                                className={`p-2 border border-brand-100 rounded-xl w-full ${errors.password && "border-2 border-red-500"}`}
                                             />
                                             <button
                                                 type="button"
@@ -137,7 +137,7 @@ export default function SignIn() {
 
                                     <button
                                         type="submit"
-                                        className="bg-orange-500 text-white font-semibold py-2 px-4 rounded-xl hover:bg-orange-600 w-full"
+                                        className="bg-brand-500 text-white font-semibold py-2 px-4 rounded-xl hover:bg-brand-600 w-full"
                                         disabled={isSubmitting}
                                     >
                                         {isSubmitting ? "Anmeldung läuft..." : "Anmelden"}

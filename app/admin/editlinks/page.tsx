@@ -158,7 +158,7 @@ const ManageLinks = () => {
                                                         onClick={() => { setId(link.id); console.log("------LINK-ID: " + link.id) }}
                                                         type="submit"
                                                         disabled={loading}
-                                                        className="bg-orange-500 items-cent hover:bg-orange-600 hover:scale-105 transition duration-200 shadow-md w-full"
+                                                        className="bg-brand-500 items-cent hover:bg-brand-600 hover:scale-105 transition duration-200 shadow-md w-full"
                                                     >
                                                         <span className="font-bold text-white shadow-sm">
                                                             {loading ? "Speichern..." : "Änderungen speichern"}
@@ -170,7 +170,7 @@ const ManageLinks = () => {
                                                                 <p style={{ color: "red" }}>{error}</p>
                                                                 <Link
                                                                     href={"/"}
-                                                                    className="bg-orange-500 text-white font-semibold py-2 px-4 rounded-xl hover:bg-orange-600"
+                                                                    className="bg-brand-500 text-white font-semibold py-2 px-4 rounded-xl hover:bg-brand-600"
                                                                 >
                                                                     erneut versuchen
                                                                 </Link>
