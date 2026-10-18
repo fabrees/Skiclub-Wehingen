@@ -20,7 +20,7 @@ const angebote = [
   },
   {
     href: "/fossiliuslauf",
-    img: "/lauf-erwachsen.png",
+    img: "/lauf-erwachsen.jpg",
     season: "Herbst",
     seasonClass: "text-brand-600",
     title: "Fossiliuslauf",

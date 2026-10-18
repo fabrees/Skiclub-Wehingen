@@ -32,22 +32,22 @@ const gruppen: {
 }[] = [
   {
     gruppe: "Erwachsene",
-    titel: "Lauf für Erwachsene",
-    img: "/lauf-erwachsen.png",
+    titel: "Läufe für Erwachsene",
+    img: "/lauf-erwachsen.jpg",
     text: "Für alle ab 15 Jahren: der anspruchsvolle Hauptlauf, der Jedermannlauf für Genießer und eine Nordic-Walking-Strecke.",
     akzent: "bg-brand-50 text-brand-700",
   },
   {
     gruppe: "Jugendliche",
-    titel: "Lauf für Jugendliche",
-    img: "/lauf-jung.png",
+    titel: "Läufe für Kinder",
+    img: "/lauf-jung.jpg",
     text: "Der Schülerlauf führt je nach Alter über 1,5 km (8–11 Jahre) oder 3,0 km (12–15 Jahre).",
     akzent: "bg-tanne-50 text-tanne-500",
   },
   {
     gruppe: "Kinder",
-    titel: "Lauf für Kinder",
-    img: "/lauf-kinder.png",
+    titel: "Läufe für unsere Kleinsten",
+    img: "/lauf-kinder.jpg",
     text: "Bambini (2–4 Jahre) und Kids (5–7 Jahre) laufen kostenlos – der erste Wettkampf mit Zuschauern am Streckenrand.",
     akzent: "bg-alb-100 text-alb-600",
   },

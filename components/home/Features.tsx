@@ -56,7 +56,7 @@ export const FossiliuslaufFeature = () => {
       <div className="relative">
         <div className="relative aspect-[4/3] overflow-hidden rounded-3xl shadow-xl">
           <Image
-            src="/lauf-erwachsen.png"
+            src="/lauf-erwachsen.jpg"
             alt="Läuferinnen und Läufer beim Fossiliuslauf"
             fill
             sizes="(min-width: 1024px) 50vw, 100vw"
