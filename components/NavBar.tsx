@@ -90,11 +90,12 @@ const NavBar = () => {
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-3">
             <Image
-              src="/Logo.gif"
+              src="/logo-skiclub.svg"
               alt="Logo Skiclub Wehingen"
-              width={81}
+              width={77}
               height={48}
               className="h-12 w-auto"
+              priority
               unoptimized
             />
             <span className="hidden leading-tight lg:block">
