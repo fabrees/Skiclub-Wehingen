@@ -1,0 +1,80 @@
+name: Freigabe / Rollback
+
+# Schaltet die getestete Version der Testseite live oder setzt die
+# Live-Seite auf die vorherige Version zurück. Es wird nichts neu gebaut.
+# Einrichtung: siehe deploy/README.md
+
+on:
+  workflow_dispatch:
+    inputs:
+      aktion:
+        description: "Was soll passieren?"
+        type: choice
+        required: true
+        default: freigeben
+        options:
+          - freigeben
+          - zuruecksetzen
+          - status
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skiclub-server
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Optional in GitHub unter Settings → Environments mit Freigabe-Pflicht versehen
+    environment: production
+
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_USER: webuser
+      BASE_DIR: /var/www/nextjs/scw
+
+    steps:
+      - name: SSH vorbereiten
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Aktion ausführen
+        env:
+          AKTION: ${{ inputs.aktion }}
+        run: |
+          # Sonst würde "tee" einen Fehler auf dem Server verschlucken
+          set -o pipefail
+
+          case "$AKTION" in
+            freigeben)     COMMAND=promote ;;
+            zuruecksetzen) COMMAND=rollback ;;
+            status)        COMMAND=status ;;
+            *) echo "Unbekannte Aktion: $AKTION"; exit 1 ;;
+          esac
+
+          ssh "$VPS_USER@$VPS_HOST" "'$BASE_DIR/scw-release.sh' $COMMAND" | tee release.log
+
+      - name: Zusammenfassung
+        if: always()
+        env:
+          AKTION: ${{ inputs.aktion }}
+        run: |
+          {
+            echo "### Aktion: $AKTION"
+            echo ""
+            echo '```'
+            cat release.log 2>/dev/null || echo "(keine Ausgabe)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

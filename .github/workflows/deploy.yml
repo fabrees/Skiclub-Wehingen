@@ -1,33 +1,114 @@
-name: Deploy to VPS
+name: Testseite deployen
+
+# Baut die Website und stellt sie auf der Testseite (Port 3001) bereit.
+# Die Live-Seite bleibt unberührt – live geschaltet wird mit dem Workflow
+# "Freigabe / Rollback". Einrichtung: siehe deploy/README.md
+#
+# Manuell starten (Actions → "Testseite deployen" → Run workflow) kann man
+# auch für einen anderen Branch, z.B. um ihn vor dem Merge zu testen.
 
 on:
   push:
     branches:
-      - main # Ausführen bei Pushes in den "main"-Branch
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Gemeinsame Gruppe mit der Freigabe, damit nie zwei Läufe gleichzeitig umschalten
+concurrency:
+  group: skiclub-server
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_USER: webuser
+      BASE_DIR: /var/www/nextjs/scw
+
     steps:
-      # Repository auschecken
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Repository auschecken
+        uses: actions/checkout@v4
 
-      # SSH-Key in den Agent laden
-      - name: Install SSH Key
-        uses: webfactory/ssh-agent@v0.5.3
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          node-version: 22
+          cache: npm
 
-      # Server zur Liste der bekannten Hosts hinzufügen
-      - name: Add server to known hosts
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Prisma Client generieren
+        run: npx prisma generate
+
+      - name: Next.js bauen
+        run: npm run build
+
+      - name: Standalone-Verzeichnis vorbereiten
+        run: |
+          if [ -d public ]; then
+            cp -r public .next/standalone/public
+          fi
+
+          mkdir -p .next/standalone/.next/static
+          cp -r .next/static/. .next/standalone/.next/static/
+
+      - name: SSH vorbereiten
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H 193.22.146.48 >> ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
 
-      # Deployment-Befehl ausführen
-      # Muss ein Befehl sein weil die befehle sonst zu schnell für den Server ausgeführt werden
-      - name: Deploy to VPS
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Server-Skripte übertragen
         run: |
-          ssh webadmin@193.22.146.48 "zsh -l -c 'source ~/.nvm/nvm.sh && nvm use 22.11.0 && cd .. && cd .. && cd .. && cd /var/www/nextjs/Skiclub-Wehingen && git pull origin main && npm install && npm run build && pm2 stop skiclubWehingen && pm2 delete skiclubWehingen && pm2 start npm --name skiclubWehingen -- start && pm2 save'"
+          ssh "$VPS_USER@$VPS_HOST" "mkdir -p '$BASE_DIR/releases' '$BASE_DIR/shared'"
+
+          rsync -az \
+            deploy/scw-release.sh \
+            deploy/ecosystem.config.js \
+            "$VPS_USER@$VPS_HOST:$BASE_DIR/"
+
+          ssh "$VPS_USER@$VPS_HOST" "chmod +x '$BASE_DIR/scw-release.sh'"
+
+      - name: Release übertragen
+        run: |
+          RELEASE_DIR="$BASE_DIR/releases/$GITHUB_SHA"
+
+          # Unveränderte Dateien (v.a. Bilder) aus der aktuellen Testseite per
+          # Hardlink übernehmen statt neu zu übertragen
+          LINK_DEST=""
+          if ssh "$VPS_USER@$VPS_HOST" "test -d '$BASE_DIR/staging/'"; then
+            LINK_DEST="--link-dest=$BASE_DIR/staging/"
+          fi
+
+          rsync -az --delete $LINK_DEST \
+            .next/standalone/ \
+            "$VPS_USER@$VPS_HOST:$RELEASE_DIR/"
+
+      - name: Testseite umschalten
+        run: |
+          ssh "$VPS_USER@$VPS_HOST" "'$BASE_DIR/scw-release.sh' staging '$GITHUB_SHA'"
+
+      - name: Zusammenfassung
+        run: |
+          {
+            echo "### Testseite aktualisiert"
+            echo ""
+            echo "- Branch: \`$GITHUB_REF_NAME\`"
+            echo "- Commit: \`${GITHUB_SHA:0:7}\`"
+            echo ""
+            echo "Nach dem Testen live schalten: **Actions → Freigabe / Rollback → Run workflow → freigeben**"
+          } >> "$GITHUB_STEP_SUMMARY"

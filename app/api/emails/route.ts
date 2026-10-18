@@ -2,9 +2,9 @@ import { RentingInfo } from "@/components/emails/RentingInfo";
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from "next/server";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(req: NextRequest) {
+    // Erst zur Laufzeit erzeugen, damit der Build ohne RESEND_API_KEY funktioniert
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const body = await req.json();
 
     const { error, data } = await resend.emails.send({
