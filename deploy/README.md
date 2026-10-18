@@ -10,7 +10,7 @@ Version landet in einem eigenen Ordner. Zwei PM2-Prozesse laufen parallel:
 
 ```
 /var/www/nextjs/scw/
-├── releases/<commit>/      fertige Builds, die letzten 5 bleiben erhalten
+├── releases/<commit>/      fertige Builds, die letzten 3 bleiben erhalten
 ├── current  -> releases/…  Live-Seite
 ├── staging  -> releases/…  Testseite
 ├── previous -> releases/…  Version vor der letzten Freigabe
@@ -263,7 +263,8 @@ nicht interaktiven Shells abbricht).
 Arbeitsverzeichnis.
 
 **Speicherplatz**
-Es bleiben die letzten 5 Releases plus alle, auf die `current`, `staging`
-oder `previous` zeigen. Unveränderte Dateien werden per Hardlink geteilt,
+Es bleiben die letzten 3 Releases plus alle, auf die `current`, `staging`
+oder `previous` zeigen. Aufgeräumt wird vor jeder Übertragung;
+abgebrochene, unvollständige Releases werden dabei immer gelöscht. Unveränderte Dateien werden per Hardlink geteilt,
 belegen also nur einmal Platz. Anzahl ändern: Umgebungsvariable
 `SCW_KEEP_RELEASES`.

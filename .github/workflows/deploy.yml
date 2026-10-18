@@ -83,6 +83,11 @@ jobs:
 
           ssh "$VPS_USER@$VPS_HOST" "chmod +x '$BASE_DIR/scw-release.sh'"
 
+      - name: Alte Releases aufräumen
+        run: |
+          # Vor der Übertragung, damit genug Platz für das neue Release frei ist
+          ssh "$VPS_USER@$VPS_HOST" "'$BASE_DIR/scw-release.sh' cleanup"
+
       - name: Release übertragen
         run: |
           RELEASE_DIR="$BASE_DIR/releases/$GITHUB_SHA"
@@ -94,7 +99,10 @@ jobs:
             LINK_DEST="--link-dest=$BASE_DIR/staging/"
           fi
 
-          rsync -az --delete $LINK_DEST \
+          # Bewusst ohne -a/-t: Die Änderungszeiten sind nach jedem Checkout
+          # neu, rsync würde sonst jede Datei als geändert ansehen und keine
+          # Hardlinks setzen. --checksum vergleicht stattdessen den Inhalt.
+          rsync -rlpz --checksum --delete $LINK_DEST \
             .next/standalone/ \
             "$VPS_USER@$VPS_HOST:$RELEASE_DIR/"
 

@@ -14,7 +14,7 @@ set -euo pipefail
 
 BASE="${SCW_BASE:-/var/www/nextjs/scw}"
 ECOSYSTEM="$BASE/ecosystem.config.js"
-KEEP_RELEASES="${SCW_KEEP_RELEASES:-5}"
+KEEP_RELEASES="${SCW_KEEP_RELEASES:-3}"
 
 APP_LIVE="scw"
 APP_STAGING="scw-staging"
@@ -129,15 +129,21 @@ cmd_status() {
   pm2 list
 }
 
-# Behält die neuesten Releases sowie alles, worauf current/staging/previous zeigen
+# Behält die neuesten Releases sowie alles, worauf current/staging/previous
+# zeigt. Unvollständige Releases (abgebrochene Übertragung) werden immer gelöscht.
 cmd_cleanup() {
   local keep_paths count=0 release
   keep_paths="$(link_target current) $(link_target staging) $(link_target previous)"
 
   while IFS= read -r release; do
     [ -n "$release" ] || continue
+    case " $keep_paths " in *" $release "*) count=$((count + 1)); continue ;; esac
+    if [ ! -f "$release/server.js" ]; then
+      rm -rf -- "$release"
+      echo "Unvollständiges Release gelöscht: $(basename "$release")"
+      continue
+    fi
     count=$((count + 1))
-    case " $keep_paths " in *" $release "*) continue ;; esac
     if [ "$count" -gt "$KEEP_RELEASES" ]; then
       rm -rf -- "$release"
       echo "Altes Release gelöscht: $(basename "$release")"
