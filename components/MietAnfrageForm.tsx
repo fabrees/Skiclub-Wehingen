@@ -7,6 +7,7 @@ type FormValues = {
     lastName: string;
     email: string;
     message: string;
+    website: string;
 }
 
 const inputClass = (hasError: boolean) =>
@@ -26,17 +27,24 @@ const MietAnfrageForm = () => {
     } = useForm<FormValues>();
 
     const [success, setSuccess] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const onSubmit = async (data: FormValues) => {
-        const response = await fetch("/api/emails", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        });
+        setError(null);
+        try {
+            const response = await fetch("/api/emails", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
 
-        if (!response.ok) {
-            setError(true)
+            if (!response.ok) {
+                const result = await response.json().catch(() => null);
+                setError(result?.error ?? "Senden fehlgeschlagen. Bitte versuchen Sie es erneut.");
+                return;
+            }
+        } catch {
+            setError("Keine Verbindung. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.");
             return;
         }
 
@@ -120,6 +128,7 @@ const MietAnfrageForm = () => {
                 <textarea
                     id="message"
                     {...register("message", {
+                        required: "Bitte geben Sie eine Nachricht ein",
                         minLength: {
                             value: 5,
                             message: "Bitte geben Sie eine gültige Nachricht ein (min. 5 Zeichen)"
@@ -131,9 +140,15 @@ const MietAnfrageForm = () => {
                 <FehlerText text={errors.message?.message} />
             </div>
 
+            {/* Honeypot gegen Spam-Bots, für Besucher unsichtbar */}
+            <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+                <label htmlFor="website">Website</label>
+                <input id="website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+            </div>
+
             {error && (
-                <p className="rounded-xl bg-red-50 p-4 text-red-700">
-                    Senden fehlgeschlagen. Bitte versuchen Sie es erneut.
+                <p role="alert" className="rounded-xl bg-red-50 p-4 text-red-700">
+                    {error}
                 </p>
             )}
 

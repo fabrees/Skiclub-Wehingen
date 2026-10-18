@@ -43,8 +43,8 @@ export const RentingInfo = (
                 <Section style={paragraphContent}>
                     <Hr style={hr} />
                     <Text style={paragraph}>
-                        Du hast eine Neue Mietanfrage von der Skiclub Website bekommen.
-                        Hier sind alle wichtige Daten die von dieser Person übermittelt wurden:
+                        Du hast eine neue Mietanfrage über die Skiclub-Website bekommen.
+                        Mit „Antworten“ geht deine Antwort direkt an die anfragende Person.
                     </Text>
 
                     <Text style={{ ...heading, marginBottom: "-20px" }}>Vorname:</Text>

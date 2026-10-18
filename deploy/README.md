@@ -93,12 +93,32 @@ In `.env.staging` anpassen:
   wenn nur per SSH-Tunnel getestet wird) – sonst klappt der Admin-Login
   auf der Testseite nicht.
 
+Für die Mietanfrage (Versand per SMTP) in **beiden** Dateien ergänzen:
+
+```bash
+SMTP_HOST=smtp.example.de        # SMTP-Server des Mail-Anbieters
+SMTP_PORT=465                    # 465 = TLS, 587 = STARTTLS
+# SMTP_SECURE=true               # nur nötig, wenn die Port-Automatik nicht passt
+SMTP_USER=noreply@sc-wehingen.de
+SMTP_PASS=geheim
+MIETANFRAGE_FROM="Skiclub Wehingen <noreply@sc-wehingen.de>"
+MIETANFRAGE_TO=huette@sc-wehingen.de,info@sc-wehingen.de
+```
+
+`MIETANFRAGE_FROM` muss eine Adresse sein, mit der der SMTP-Zugang senden
+darf. Mehrere Empfänger in `MIETANFRAGE_TO` mit Komma trennen. Antworten auf
+die Mail gehen automatisch an die anfragende Person (Reply-To). Fehlt eine
+der Variablen, zeigt das Formular „Der Versand ist derzeit nicht möglich“.
+
+In `.env.staging` `MIETANFRAGE_TO` auf eine eigene Testadresse setzen, damit
+Tests auf der Testseite nicht beim Verein landen.
+
 Beide Dateien müssen existieren, sonst startet der jeweilige Prozess nicht.
 
 > **Achtung:** Mit denselben Werten nutzt die Testseite **dieselbe
 > Datenbank** wie die Live-Seite. Beiträge, die man auf der Testseite im
-> Admin-Bereich anlegt, erscheinen sofort auch live, und Mietanfragen
-> verschicken echte E-Mails. Zum Ansehen ist das unproblematisch.
+> Admin-Bereich anlegt, erscheinen sofort auch live. Mietanfragen gehen an
+> die in `.env.staging` eingetragene Testadresse. Zum Ansehen ist das unproblematisch.
 
 ### 4. GitHub einrichten
 
