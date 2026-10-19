@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { WHATSAPP_SKILIFT_URL } from "@/lib/verein";
-import { fossiliuslaufTermin } from "@/lib/fossiliuslauf";
+import { ANMELDUNG_OFFEN, fossiliuslaufTermin } from "@/lib/fossiliuslauf";
 
 export const SkiliftFeature = () => (
   <section id="skilift" className="mx-auto grid max-w-7xl scroll-mt-24 items-center gap-12 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-2">
@@ -99,7 +99,7 @@ export const FossiliuslaufFeature = () => {
           href="/fossiliuslauf"
           className="mt-8 inline-block rounded-full bg-brand-500 px-6 py-3 font-bold text-white hover:bg-brand-600"
         >
-          Alle Infos &amp; Anmeldung
+          {ANMELDUNG_OFFEN ? "Alle Infos & Anmeldung" : "Alle Infos zum Lauf"}
         </Link>
       </div>
     </section>

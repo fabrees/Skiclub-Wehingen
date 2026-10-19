@@ -5,6 +5,7 @@ import HoverButton from "@/components/HoverButton";
 import Sprinter from "@/components/Sprinter";
 import MapConsent from "@/components/MapConsent";
 import {
+  ANMELDUNG_OFFEN,
   ANMELDUNG_URL,
   ERGEBNISSE_URL,
   fossiliuslaufTermin,
@@ -54,7 +55,8 @@ const gruppen: {
 ];
 
 const Fossiliuslauf = () => {
-  const datum = fossiliuslaufTermin().lang;
+  const termin = fossiliuslaufTermin();
+  const datum = termin.lang;
 
   return (
     <div>
@@ -78,14 +80,20 @@ const Fossiliuslauf = () => {
               letzten Septembersonntag statt.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href={ANMELDUNG_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-brand-500 px-6 py-3 font-bold text-white shadow hover:bg-brand-600"
-              >
-                Jetzt anmelden
-              </a>
+              {ANMELDUNG_OFFEN ? (
+                <a
+                  href={ANMELDUNG_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full bg-brand-500 px-6 py-3 font-bold text-white shadow hover:bg-brand-600"
+                >
+                  Jetzt anmelden
+                </a>
+              ) : (
+                <span className="rounded-full bg-white px-6 py-3 font-semibold text-slate-500 ring-1 ring-slate-200">
+                  Die Anmeldung für {termin.jahr} ist noch nicht geöffnet
+                </span>
+              )}
               <a
                 href="#zeitplan"
                 className="rounded-full bg-white px-6 py-3 font-bold text-alb-900 ring-1 ring-slate-300 hover:ring-brand-500"

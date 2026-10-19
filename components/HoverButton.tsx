@@ -1,7 +1,9 @@
-import { ANMELDUNG_URL } from "@/lib/fossiliuslauf";
+import { ANMELDUNG_OFFEN, ANMELDUNG_URL } from "@/lib/fossiliuslauf";
 
 // Schwebender Anmelde-Button auf der Fossiliuslauf-Seite
 export default function HoverButton() {
+    if (!ANMELDUNG_OFFEN) return null;
+
     return (
         <a
             href={ANMELDUNG_URL}

@@ -87,6 +87,7 @@ export default function Home() {
 }
 
 export const metadata: Metadata = {
-  title: "Skiclub Wehingen Homepage",
-  description: "Alle wichtigen Informationen über den Skiclub: Mieten, Fossiliuslauf, Skilift, Preise, Skiliftpreise, Neuigkeiten, Rundmails, Blog, Infos",
+  title: "Skiclub Wehingen e.V. – Skilift, Fossiliuslauf, MTB-Trail",
+  description:
+    "Skiclub Wehingen e.V. auf dem Heuberg: Skilift, Langlaufloipe, Skihütte, Fossiliuslauf und MTB-Trail – alle Infos und Neuigkeiten.",
 };

@@ -34,6 +34,11 @@ export function fossiliuslaufTermin(): Termin {
   return { fest: false, lang: `September ${jahr}`, kurz: "September", jahr };
 }
 
+// Auf true setzen, sobald die Online-Anmeldung für den nächsten Lauf offen ist
+// (und ANMELDUNG_URL auf die neue Anmeldeseite zeigt). Solange false, werden
+// alle Anmelde-Buttons ausgeblendet und ein Hinweis angezeigt.
+export const ANMELDUNG_OFFEN = false;
+
 export const ANMELDUNG_URL =
   "http://www.fossiliuslauf.sc-wehingen.de/anmeldung/anmeldung-2026.html";
 

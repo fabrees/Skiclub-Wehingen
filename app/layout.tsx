@@ -11,8 +11,30 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "Skiclub Wehingen Fossiliuslauf Homepage",
-  description: "Alle Informationen über den Skiclub Wehingen und den Fossiliuslauf, so wie die neusten Aktivitäten",
+  // Basis für absolute Bild-URLs in der Link-Vorschau
+  metadataBase: new URL("https://sc-wehingen.de"),
+  title: "Skiclub Wehingen e.V. – Skilift, Fossiliuslauf, MTB-Trail",
+  description:
+    "Skiclub Wehingen e.V. auf dem Heuberg: Skilift, Langlaufloipe, Skihütte, Fossiliuslauf und MTB-Trail – alle Infos und Neuigkeiten.",
+  // Vorschau beim Teilen von Links (WhatsApp, Facebook, …). Titel und
+  // Beschreibung kommen aus den Metadaten der jeweiligen Seite.
+  openGraph: {
+    type: "website",
+    locale: "de_DE",
+    siteName: "Skiclub Wehingen e.V.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Skihütte des Skiclubs Wehingen im Schnee mit Vereinslogo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-image.jpg"],
+  },
 };
 
 export default function RootLayout({
