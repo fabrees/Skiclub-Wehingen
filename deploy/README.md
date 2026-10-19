@@ -102,7 +102,7 @@ SMTP_PORT=465                    # 465 = TLS, 587 = STARTTLS
 SMTP_USER=noreply@sc-wehingen.de
 SMTP_PASS=geheim
 MIETANFRAGE_FROM="Skiclub Wehingen <noreply@sc-wehingen.de>"
-MIETANFRAGE_TO=huette@sc-wehingen.de,info@sc-wehingen.de
+MIETANFRAGE_TO=skihuette@sc-wehingen.de,info@sc-wehingen.de
 ```
 
 `MIETANFRAGE_FROM` muss eine Adresse sein, mit der der SMTP-Zugang senden

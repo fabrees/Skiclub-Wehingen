@@ -67,63 +67,112 @@ const Datenschutz = () => {
                 </p>
             </section>
 
-            {/* Abschnitt 3: Cookies */}
+            {/* Abschnitt 3: Hosting und Server-Logfiles */}
             <section>
-                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">3. Cookies</h2>
+                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">3. Hosting und Server-Logfiles</h2>
                 <p className="mb-4">
-                    Die Internetseiten des Skiclub Wehingen verwenden Cookies. Cookies sind Textdateien, welche über einen Internetbrowser auf einem
-                    Computersystem abgelegt und gespeichert werden.
-                </p>
-                <p className="mb-4">
-                    Durch den Einsatz von Cookies kann der Skiclub Wehingen den Nutzern dieser Internetseite nutzerfreundlichere Services bereitstellen,
-                    die ohne die Cookie-Setzung nicht möglich wären.
-                </p>
-                <p className="mb-4">
-                    Die betroffene Person kann die Setzung von Cookies durch unsere Internetseite jederzeit mittels entsprechender Einstellung des
-                    genutzten Internetbrowsers verhindern. Wird die Setzung von Cookies deaktiviert, sind unter Umständen nicht alle Funktionen unserer
-                    Internetseite vollumfänglich nutzbar.
-                </p>
-            </section>
-
-            {/* Abschnitt 4: Server-Logfiles */}
-            <section>
-                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">4. Server-Logfiles</h2>
-                <p className="mb-4">
-                    Die Internetseite erfasst mit jedem Aufruf eine Reihe von allgemeinen Daten und Informationen. Diese werden in den Logfiles des Servers gespeichert.
+                    Diese Website wird auf einem virtuellen Server der IONOS SE, Elgendorfer Str. 57, 56410 Montabaur, betrieben,
+                    mit der wir einen Auftragsverarbeitungsvertrag geschlossen haben (Art. 28 DSGVO). Bei jedem Aufruf speichert
+                    der Webserver automatisch folgende Daten in Server-Logfiles:
                 </p>
                 <ul className="list-disc list-inside mb-4">
-                    <li>verwendete Browsertypen und Versionen</li>
-                    <li>das verwendete Betriebssystem</li>
-                    <li>Referrer-URLs</li>
-                    <li>Datum und Uhrzeit eines Zugriffs</li>
-                    <li>IP-Adresse (anonymisiert)</li>
+                    <li>IP-Adresse</li>
+                    <li>Datum und Uhrzeit des Zugriffs</li>
+                    <li>aufgerufene Seite, Statuscode und übertragene Datenmenge</li>
+                    <li>Referrer-URL</li>
+                    <li>verwendeter Browser und Betriebssystem</li>
                 </ul>
                 <p className="mb-4">
-                    Diese Daten dienen zur sicheren Betriebsgewährleistung und werden nach 7 Tagen gelöscht.
+                    Die Verarbeitung dient dem sicheren und stabilen Betrieb der Website, etwa zur Abwehr von Angriffen und zur
+                    Fehleranalyse (Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO). Die Logfiles werden nach 14 Tagen automatisch
+                    gelöscht.
                 </p>
             </section>
 
-            {/* Abschnitt 5: Kontaktaufnahme */}
+            {/* Abschnitt 4: Cookies */}
             <section>
-                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">5. Kontaktmöglichkeit</h2>
+                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">4. Cookies</h2>
                 <p className="mb-4">
-                    Bei Kontaktaufnahme per E-Mail oder Formular werden Ihre Angaben zwecks Bearbeitung der Anfrage gespeichert.
-                    Eine Weitergabe an Dritte erfolgt nicht.
+                    Für Besucherinnen und Besucher unserer Website setzen wir keine Cookies. Lediglich bei der Anmeldung im
+                    internen Verwaltungsbereich wird ein technisch notwendiges Sitzungs-Cookie gesetzt, das die Anmeldung
+                    aufrechterhält (Rechtsgrundlage: § 25 Abs. 2 Nr. 2 TDDDG, Art. 6 Abs. 1 lit. f DSGVO). Dieses Cookie betrifft
+                    nur berechtigte Vereinsmitglieder.
                 </p>
             </section>
 
-            {/* Abschnitt 6: Speicherdauer */}
+            {/* Abschnitt 5: Kontaktaufnahme und Mietanfrage */}
             <section>
-                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">6. Speicherdauer</h2>
+                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">5. Kontaktaufnahme und Mietanfrage</h2>
+                <p className="mb-4">
+                    Wenn Sie uns per E-Mail kontaktieren, verarbeiten wir Ihre Angaben zur Bearbeitung Ihrer Anfrage.
+                </p>
+                <p className="mb-4">
+                    Wenn Sie über das Formular auf der Seite „Mieten“ eine Anfrage stellen, verarbeiten wir Vorname, Nachname,
+                    E-Mail-Adresse und Ihre Nachricht, um die Anfrage zu beantworten und ggf. einen Mietvertrag anzubahnen
+                    (Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO). Die Anfrage wird per E-Mail an die zuständigen Vereinsmitglieder
+                    weitergeleitet. Für den Versand nutzen wir den E-Mail-Dienst der IONOS SE, Montabaur. Zum Schutz vor
+                    Missbrauch wird Ihre IP-Adresse für bis zu 10 Minuten im Arbeitsspeicher des Servers vorgehalten
+                    (Art. 6 Abs. 1 lit. f DSGVO). Eine Weitergabe an sonstige Dritte erfolgt nicht.
+                </p>
+            </section>
+
+            {/* Abschnitt 6: Google Maps */}
+            <section>
+                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">6. Google Maps</h2>
+                <p className="mb-4">
+                    Auf der Seite zum Fossiliuslauf können Sie eine Karte von Google Maps anzeigen. Die Karte wird erst geladen,
+                    wenn Sie auf „Google Maps laden“ klicken. Erst dann werden Daten, insbesondere Ihre IP-Adresse, an Google
+                    übertragen. Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Eine
+                    Übermittlung in die USA ist möglich; Google ist unter dem EU-US Data Privacy Framework zertifiziert.
+                </p>
+                <p className="mb-4">
+                    Rechtsgrundlage ist Ihre Einwilligung durch den Klick (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG). Die
+                    Einwilligung gilt nur für den jeweiligen Seitenaufruf. Nach dem Neuladen der Seite wird die Karte nicht mehr
+                    automatisch geladen. Weitere Informationen:{" "}
+                    <a
+                        href="https://policies.google.com/privacy"
+                        className="text-brand-600 hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        https://policies.google.com/privacy
+                    </a>
+                </p>
+            </section>
+
+            {/* Abschnitt 7: Hochgeladene Bilder */}
+            <section>
+                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">7. Speicherung hochgeladener Bilder</h2>
+                <p className="mb-4">
+                    Bilder, die der Verein für Beiträge hochlädt, speichern wir bei Amazon Web Services (Amazon Web Services EMEA
+                    SARL, Luxemburg) in einem Rechenzentrum in Stockholm (EU). Die Auslieferung an Besucherinnen und Besucher
+                    erfolgt über unseren eigenen Server; dabei werden keine Daten von Ihnen an AWS übermittelt.
+                </p>
+            </section>
+
+            {/* Abschnitt 8: Externe Links */}
+            <section>
+                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">8. Links zu externen Angeboten</h2>
+                <p className="mb-4">
+                    Unsere Website enthält Links zu externen Angeboten, z. B. zu unserem WhatsApp-Kanal, zu Instagram, zu
+                    raceresult (Ergebnisse und Anmeldung) und zu skiwanderwege-heuberg.de. Es handelt sich um einfache Links, die
+                    Inhalte werden nicht eingebettet. Erst wenn Sie einen Link anklicken, werden Daten an den jeweiligen Anbieter
+                    übertragen. Dafür gilt dessen Datenschutzerklärung.
+                </p>
+            </section>
+
+            {/* Abschnitt 9: Speicherdauer */}
+            <section>
+                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">9. Speicherdauer</h2>
                 <p className="mb-4">
                     Personenbezogene Daten werden nur so lange gespeichert, wie es für den Verarbeitungszweck erforderlich ist
                     oder gesetzliche Aufbewahrungsfristen (z.B. steuerrechtliche 10 Jahre) dies vorschreiben.
                 </p>
             </section>
 
-            {/* Abschnitt 7: Betroffenenrechte */}
+            {/* Abschnitt 10: Betroffenenrechte */}
             <section>
-                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">7. Ihre Rechte</h2>
+                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">10. Ihre Rechte</h2>
 
                 <h3 className="mb-2 mt-6 text-xl font-bold text-alb-900">a) Auskunft und Berichtigung</h3>
                 <p className="mb-4">
@@ -159,23 +208,29 @@ const Datenschutz = () => {
                         Landesbeauftragter für Datenschutz Baden-Württemberg
                     </a>
                 </p>
+
+                <h3 className="mb-2 mt-6 text-xl font-bold text-alb-900">f) Widerruf einer Einwilligung</h3>
+                <p className="mb-4">
+                    Eine erteilte Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen. Die Rechtmäßigkeit der
+                    bis zum Widerruf erfolgten Verarbeitung bleibt unberührt.
+                </p>
             </section>
 
-            {/* Abschnitt 8: Aktualisierungen */}
+            {/* Abschnitt 11: Aktualisierungen */}
             <section>
-                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">8. Aktualität der Datenschutzerklärung</h2>
+                <h2 className="mb-4 mt-12 text-2xl font-extrabold text-alb-900 sm:text-3xl">11. Aktualität der Datenschutzerklärung</h2>
                 <p className="mb-4">
                     Diese Datenschutzerklärung wird bei wesentlichen Änderungen aktualisiert. Die jeweils aktuelle Version finden
                     Sie stets auf dieser Seite.
                 </p>
                 <p className="text-sm text-slate-500">
-                    Stand: 01. Januar 2024
+                    Stand: Oktober 2026
                 </p>
             </section>
 
             {/* Kontaktmöglichkeit */}
             <section className="mt-12 border-t border-slate-200 pt-8">
-                <h2 className="mb-4 text-xl font-bold text-alb-900">Kontakt zum Datenschutzbeauftragten</h2>
+                <h2 className="mb-4 text-xl font-bold text-alb-900">Fragen zum Datenschutz</h2>
                 <p>
                     Bei Fragen zum Datenschutz erreichen Sie uns unter:
                     <br />

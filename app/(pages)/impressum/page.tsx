@@ -74,17 +74,6 @@ const Impressum = () => {
             {/* Streitbeilegung */}
             <section>
                 <h2 className="mb-4 text-2xl font-extrabold text-alb-900 sm:text-3xl">Streitbeilegung</h2>
-                <p className="mb-4">
-                    Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:
-                    <a
-                        href="https://ec.europa.eu/consumers/odr"
-                        className="text-brand-600 hover:underline ml-1"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        https://ec.europa.eu/consumers/odr
-                    </a>
-                </p>
                 <p>
                     Wir sind nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer
                     Verbraucherschlichtungsstelle teilzunehmen.
@@ -107,7 +96,7 @@ const Impressum = () => {
 
             {/* Aktualitätshinweis */}
             <div className="border-t border-slate-200 pt-4 text-sm text-slate-500">
-                <p>Dieses Impressum wurde zuletzt aktualisiert am 01. Januar 2024</p>
+                <p>Dieses Impressum wurde zuletzt aktualisiert im Oktober 2026</p>
             </div>
             </div>
         </div>
