@@ -16,7 +16,8 @@ export const RentingInfo = (
     firstname: string,
     lastname: string,
     email: string,
-    message: string
+    message: string,
+    zeitraum: string
 ) => (
     <Html>
         <Head />
@@ -45,7 +46,11 @@ export const RentingInfo = (
                     <Text style={paragraph}>
                         Du hast eine neue Mietanfrage über die Skiclub-Website bekommen.
                         Mit „Antworten“ geht deine Antwort direkt an die anfragende Person.
+                        Der Zeitraum ist vorläufig im Buchungskalender geblockt – bitte dort bestätigen.
                     </Text>
+
+                    <Text style={{ ...heading, marginBottom: "-20px" }}>Zeitraum:</Text>
+                    <Text style={paragraph}>{zeitraum}</Text>
 
                     <Text style={{ ...heading, marginBottom: "-20px" }}>Vorname:</Text>
                     <Text style={paragraph}>{`${firstname}`}</Text>

@@ -3,6 +3,14 @@ import { render } from "@react-email/components";
 import nodemailer from "nodemailer";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import prisma from "@/prisma/lib/client";
+import {
+    belegendeBuchungen,
+    buchbarerZeitraum,
+    ladeEinstellungen,
+    ueberschneidung,
+} from "@/lib/buchungen";
+import { dateAusTag, formatZeitraum, istGueltigerTag } from "@/lib/datum";
 
 export const runtime = "nodejs";
 
@@ -11,6 +19,8 @@ const anfrageSchema = z.object({
     lastName: z.string().trim().min(2, "Bitte geben Sie einen gültigen Nachnamen an").max(100),
     email: z.string().trim().email("Bitte geben Sie eine gültige E-Mail an").max(200),
     message: z.string().trim().min(5, "Bitte geben Sie eine Nachricht ein (min. 5 Zeichen)").max(5000),
+    von: z.string().refine(istGueltigerTag, "Bitte wählen Sie einen Zeitraum"),
+    bis: z.string().refine(istGueltigerTag, "Bitte wählen Sie einen Zeitraum"),
     // Honeypot: für Menschen unsichtbar, Bots füllen es aus
     website: z.string().optional(),
 });
@@ -62,7 +72,7 @@ export async function POST(req: NextRequest) {
         );
     }
 
-    const { firstName, lastName, email, message, website } = parsed.data;
+    const { firstName, lastName, email, message, website, von, bis } = parsed.data;
 
     // Bot erkannt: so tun, als wäre alles gut gegangen
     if (website) return NextResponse.json({ ok: true });
@@ -84,20 +94,73 @@ export async function POST(req: NextRequest) {
         );
     }
 
+    // Zeitraum prüfen und für die Sperrfrist blocken. Erst eintragen, dann
+    // senden – schlägt der Versand fehl, wird der Eintrag wieder entfernt.
+    let buchungId: number;
     try {
-        const html = await render(RentingInfo(firstName, lastName, email, message));
-        const text = `Neue Mietanfrage von der Skiclub-Website\n\nVorname: ${firstName}\nNachname: ${lastName}\nE-Mail: ${email}\n\nNachricht:\n${message}\n`;
+        const einstellungen = await ladeEinstellungen();
+        const { ersterTag, letzterTag } = buchbarerZeitraum(einstellungen);
+        if (von > bis || von < ersterTag || bis > letzterTag) {
+            return NextResponse.json(
+                { error: `Bitte wählen Sie einen Zeitraum innerhalb der nächsten ${einstellungen.buchungshorizontTage} Tage.` },
+                { status: 400 }
+            );
+        }
+
+        const ergebnis = await prisma.$transaction(
+            async (tx) => {
+                const konflikt = await tx.buchung.findFirst({
+                    where: { AND: [belegendeBuchungen(), ueberschneidung(von, bis)] },
+                    select: { id: true },
+                });
+                if (konflikt) return null;
+                return tx.buchung.create({
+                    data: {
+                        von: dateAusTag(von),
+                        bis: dateAusTag(bis),
+                        status: "ANFRAGE",
+                        titel: `${firstName} ${lastName}`,
+                        name: `${firstName} ${lastName}`,
+                        email,
+                        nachricht: message,
+                        geblocktBis: new Date(Date.now() + einstellungen.anfrageSperreStunden * 3600 * 1000),
+                    },
+                });
+            },
+            { isolationLevel: "Serializable" }
+        );
+
+        if (!ergebnis) {
+            return NextResponse.json(
+                { error: "Der gewählte Zeitraum ist leider bereits belegt. Bitte wählen Sie einen anderen." },
+                { status: 409 }
+            );
+        }
+        buchungId = ergebnis.id;
+    } catch (err) {
+        console.error("Mietanfrage: Eintrag in den Kalender fehlgeschlagen", err);
+        return NextResponse.json(
+            { error: "Die Anfrage konnte nicht gespeichert werden. Bitte versuchen Sie es erneut." },
+            { status: 500 }
+        );
+    }
+
+    const zeitraum = formatZeitraum(von, bis);
+    try {
+        const html = await render(RentingInfo(firstName, lastName, email, message, zeitraum));
+        const text = `Neue Mietanfrage von der Skiclub-Website\n\nZeitraum: ${zeitraum}\nVorname: ${firstName}\nNachname: ${lastName}\nE-Mail: ${email}\n\nNachricht:\n${message}\n`;
 
         await nodemailer.createTransport(konfig.transport).sendMail({
             from: konfig.from,
             to: konfig.to,
             replyTo: { name: `${firstName} ${lastName}`, address: email },
-            subject: `Mietanfrage Skihütte: ${firstName} ${lastName}`.replace(/[\r\n]+/g, " "),
+            subject: `Mietanfrage Skihütte ${zeitraum}: ${firstName} ${lastName}`.replace(/[\r\n]+/g, " "),
             html,
             text,
         });
     } catch (err) {
         console.error("Mietanfrage: Versand fehlgeschlagen", err);
+        await prisma.buchung.delete({ where: { id: buchungId } }).catch(() => undefined);
         return NextResponse.json(
             { error: "Der Versand ist fehlgeschlagen. Bitte versuchen Sie es später erneut." },
             { status: 502 }

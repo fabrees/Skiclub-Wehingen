@@ -26,3 +26,32 @@ model LinkData {
   name     String 
   document String
 }
+
+enum BuchungStatus {
+  ANFRAGE    // über die Website angefragt, für eine begrenzte Zeit geblockt
+  BESTAETIGT // vom Hüttenwart bestätigt oder selbst eingetragen
+}
+
+// Belegung der Skihütte. "von" und "bis" sind beide inklusive (ganze Tage).
+model Buchung {
+  id          Int           @id @default(autoincrement())
+  von         DateTime      @db.Date
+  bis         DateTime      @db.Date
+  status      BuchungStatus @default(ANFRAGE)
+  // Text für den Admin-Kalender, öffentlich nie sichtbar
+  titel       String        @db.VarChar(200)
+  name        String?       @db.VarChar(200)
+  email       String?       @db.VarChar(200)
+  nachricht   String?       @db.Text
+  // Nur für Anfragen: bis wann der Zeitraum geblockt ist
+  geblocktBis DateTime?
+  createdAt   DateTime      @default(now())
+
+  @@index([von, bis])
+}
+
+// Einstellungen als Schlüssel/Wert, z. B. "buchungshorizontTage"
+model Einstellung {
+  schluessel String @id @db.VarChar(100)
+  wert       String @db.VarChar(500)
+}

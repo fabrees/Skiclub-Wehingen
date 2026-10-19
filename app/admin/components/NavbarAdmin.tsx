@@ -23,6 +23,14 @@ const NavBar = () => {
 
       <hr />
 
+      <Link href="/admin/kalender" className=" p-3 hover:scale-105 duration-150">
+        <div className="font-bold text-xl">
+          Buchungs- <br /> kalender
+        </div>
+      </Link>
+
+      <hr />
+
       <Link href="/" className=" p-3 hover:scale-105 duration-150">
         <div className="font-bold text-xl">
           Modus <br /> beenden

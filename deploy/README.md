@@ -119,6 +119,34 @@ Beide Dateien müssen existieren, sonst startet der jeweilige Prozess nicht.
 > Datenbank** wie die Live-Seite. Beiträge, die man auf der Testseite im
 > Admin-Bereich anlegt, erscheinen sofort auch live. Mietanfragen gehen an
 > die in `.env.staging` eingetragene Testadresse. Zum Ansehen ist das unproblematisch.
+> Ausnahme Buchungskalender: Eine Testanfrage auf der Testseite blockiert den
+> Zeitraum auch live (24 h) – im Admin-Kalender wieder löschen.
+
+#### Buchungskalender Skihütte
+
+Der Kalender braucht die Tabellen `Buchung` und `Einstellung`. Einmalig vor
+dem ersten Deployment mit Kalender auf die Datenbank anwenden:
+
+```bash
+DATABASE_URL="mysql://…" npx prisma migrate deploy
+```
+
+Falls die Datenbank bisher nicht über Prisma-Migrationen gepflegt wurde
+(`migrate deploy` will dann alte Migrationen erneut ausführen), stattdessen
+nur das SQL aus `prisma/migrations/20261019200000_buchungskalender/migration.sql`
+ausführen.
+
+Für das interne Kalender-Abo (ICS mit Namen und Text) in **beiden**
+Dateien einen langen Zufallswert setzen, z. B. mit `openssl rand -hex 24`:
+
+```bash
+KALENDER_ICS_TOKEN=…
+```
+
+Ohne Token gibt es nur das öffentliche Abo (`/api/kalender/belegung.ics`,
+nur „Belegt“). Beide Abo-Links stehen im Admin-Bereich unter
+*Buchungskalender*. Buchungshorizont (Standard 365 Tage) und Sperrfrist für
+Anfragen (Standard 24 h) lassen sich dort ändern.
 
 ### 4. GitHub einrichten
 
