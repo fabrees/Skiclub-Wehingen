@@ -2,7 +2,7 @@ import Image from "next/image";
 import { DOKUMENTE } from "@/lib/verein";
 
 const bilder = [
-  "/SkihuetteSommerAußen.jpg",
+  "/SkihuetteSommerAussen.jpg",
   "/Skihuette2.jpg",
   "/bettenNeu.jpg",
   "/bettenNeu2.jpg",

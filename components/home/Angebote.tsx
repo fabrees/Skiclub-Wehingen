@@ -4,7 +4,7 @@ import Link from "next/link";
 const angebote = [
   {
     href: "/mieten",
-    img: "/SkihuetteSommerAußen.jpg",
+    img: "/SkihuetteSommerAussen.jpg",
     season: "Ganzjährig",
     seasonClass: "text-alb-600",
     title: "Skihütte",
