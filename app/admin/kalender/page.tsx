@@ -1,7 +1,6 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Copy } from "lucide-react";
-import NavbarAdmin from "@/app/admin/components/NavbarAdmin";
 import type { BuchungJson } from "@/lib/buchungen";
 import {
   dateAusTag,
@@ -178,12 +177,24 @@ const BuchungsKalenderAdmin = () => {
 
   const ausgewaehlt = entwurf?.id ? buchungen.find((b) => b.id === entwurf.id) : undefined;
 
+  // Buchungen, die den angezeigten Monat berühren (Liste für schmale Bildschirme)
+  const monatsEnde = naechsterMonat(monat);
+  const buchungenImMonat = buchungen.filter((b) => b.von < monatsEnde && b.bis >= monat);
+
+  // Liegt das Formular unter dem Kalender, dorthin scrollen
+  const formRef = useRef<HTMLFormElement>(null);
+  const bearbeiten = (e: Entwurf) => {
+    setEntwurf(e);
+    requestAnimationFrame(() => {
+      if (window.innerWidth < 1536) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
+
   return (
-    <div className="mb-12 mr-5 flex flex-col items-end py-11">
-      <NavbarAdmin />
-      <div className="w-[calc(100%-10rem)] max-w-7xl">
+    <div className="mb-12">
+      <div>
         <h1 className="text-3xl font-bold tracking-tight md:text-5xl">Buchungskalender Skihütte</h1>
-        <p className="mb-8 mt-3">
+        <p className="mb-6 mt-3 sm:mb-8">
           Tag anklicken, um eine Buchung einzutragen. Eine Buchung anklicken, um sie zu bearbeiten.
         </p>
 
@@ -196,9 +207,9 @@ const BuchungsKalenderAdmin = () => {
           </p>
         )}
 
-        <div className="grid gap-8 xl:grid-cols-[1fr_22rem]">
+        <div className="grid gap-6 sm:gap-8 2xl:grid-cols-[1fr_22rem]">
           {/* MONATSANSICHT */}
-          <section className="rounded-2xl bg-white p-4 shadow-md ring-1 ring-slate-200">
+          <section className="rounded-2xl bg-white p-2 shadow-md ring-1 ring-slate-200 sm:p-4">
             <div className="mb-4 flex items-center justify-between">
               <button
                 type="button"
@@ -209,7 +220,7 @@ const BuchungsKalenderAdmin = () => {
                 <ChevronLeft />
               </button>
               <div className="flex items-center gap-3">
-                <h2 className="text-xl font-bold text-alb-900">{monatsName(monat)}</h2>
+                <h2 className="text-lg font-bold text-alb-900 sm:text-xl">{monatsName(monat)}</h2>
                 <button
                   type="button"
                   onClick={() => {
@@ -243,9 +254,9 @@ const BuchungsKalenderAdmin = () => {
                     key={tag}
                     role="button"
                     tabIndex={0}
-                    onClick={() => setEntwurf(leererEntwurf(tag))}
-                    onKeyDown={(e) => e.key === "Enter" && setEntwurf(leererEntwurf(tag))}
-                    className={`min-h-24 cursor-pointer bg-white p-1 text-left hover:bg-brand-50 ${
+                    onClick={() => bearbeiten(leererEntwurf(tag))}
+                    onKeyDown={(e) => e.key === "Enter" && bearbeiten(leererEntwurf(tag))}
+                    className={`min-h-14 cursor-pointer bg-white p-0.5 text-left hover:bg-brand-50 sm:min-h-24 sm:p-1 ${
                       tag < heute() ? "bg-slate-50 text-slate-400" : ""
                     }`}
                   >
@@ -256,21 +267,23 @@ const BuchungsKalenderAdmin = () => {
                     >
                       {Number(tag.slice(8))}
                     </span>
-                    <div className="mt-1 space-y-1">
+                    <div className="mt-0.5 space-y-0.5 sm:mt-1 sm:space-y-1">
                       {buchungenAmTag.get(tag)?.map((b) => (
                         <button
                           key={b.id}
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
-                            setEntwurf(alsEntwurf(b));
+                            bearbeiten(alsEntwurf(b));
                           }}
                           title={`${b.titel} (${formatZeitraum(b.von, b.bis)})`}
-                          className={`block w-full truncate rounded px-1.5 py-0.5 text-left text-xs font-semibold ${chipKlasse(
+                          aria-label={`${b.titel} (${formatZeitraum(b.von, b.bis)})`}
+                          className={`block h-2 w-full truncate rounded text-left text-xs font-semibold sm:h-auto sm:px-1.5 sm:py-0.5 ${chipKlasse(
                             b
                           )} ${entwurf?.id === b.id ? "outline outline-2 outline-alb-900" : ""}`}
                         >
-                          {b.titel}
+                          {/* Auf dem Handy nur ein Farbbalken, Text steht in der Liste darunter */}
+                          <span className="hidden sm:inline">{b.titel}</span>
                         </button>
                       ))}
                     </div>
@@ -281,7 +294,7 @@ const BuchungsKalenderAdmin = () => {
               )}
             </div>
 
-            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-600">
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 px-2 text-sm text-slate-600 sm:px-0">
               <span className="flex items-center gap-2">
                 <span className="h-4 w-4 rounded bg-brand-500" /> bestätigt
               </span>
@@ -292,12 +305,37 @@ const BuchungsKalenderAdmin = () => {
                 <span className="h-4 w-4 rounded bg-slate-100" /> Anfrage abgelaufen (wieder frei)
               </span>
             </div>
+
+            <ul className="mt-4 space-y-2 border-t border-slate-100 px-2 pb-2 pt-4 sm:hidden">
+              {buchungenImMonat.length === 0 && (
+                <li className="text-sm text-slate-500">Keine Buchungen in diesem Monat.</li>
+              )}
+              {buchungenImMonat.map((b) => (
+                <li key={b.id}>
+                  <button
+                    type="button"
+                    onClick={() => bearbeiten(alsEntwurf(b))}
+                    className="flex w-full items-start gap-3 rounded-lg p-2 text-left text-sm hover:bg-alb-50"
+                  >
+                    <span className={`mt-1 h-3 w-3 shrink-0 rounded ${chipKlasse(b)}`} />
+                    <span>
+                      <span className="block font-semibold text-alb-900">{b.titel}</span>
+                      <span className="block text-slate-500">{formatZeitraum(b.von, b.bis)}</span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
           </section>
 
           {/* SEITENLEISTE */}
-          <aside className="space-y-6">
+          <aside className="grid content-start gap-6 lg:grid-cols-2 2xl:grid-cols-1">
             {entwurf && (
-              <form onSubmit={speichern} className="space-y-3 rounded-2xl bg-white p-5 shadow-md ring-1 ring-slate-200">
+              <form
+                ref={formRef}
+                onSubmit={speichern}
+                className="scroll-mt-40 space-y-3 rounded-2xl bg-white p-5 shadow-md ring-1 ring-slate-200 lg:scroll-mt-28"
+              >
                 <h2 className="text-lg font-bold text-alb-900">
                   {entwurf.id ? "Buchung bearbeiten" : "Neue Buchung"}
                 </h2>
@@ -434,7 +472,7 @@ const BuchungsKalenderAdmin = () => {
                 {offeneAnfragen.map((b) => (
                   <li key={b.id} className="rounded-xl bg-brand-50 p-3 text-sm">
                     <button type="button" onClick={() => {
-                      setEntwurf(alsEntwurf(b));
+                      bearbeiten(alsEntwurf(b));
                       setMonat(monatsAnfang(dateAusTag(b.von).getUTCFullYear(), dateAusTag(b.von).getUTCMonth()));
                     }} className="text-left">
                       <span className="block font-bold text-alb-900">{formatZeitraum(b.von, b.bis)}</span>
@@ -473,7 +511,7 @@ const BuchungsKalenderAdmin = () => {
                     <button
                       type="button"
                       onClick={() => {
-                        setEntwurf(alsEntwurf(b));
+                        bearbeiten(alsEntwurf(b));
                         setMonat(monatsAnfang(dateAusTag(b.von).getUTCFullYear(), dateAusTag(b.von).getUTCMonth()));
                       }}
                       className="w-full py-2 text-left hover:text-brand-600"

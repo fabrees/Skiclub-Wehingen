@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation"; // useParams for accessing dynamic params
-import NavBarAdmin from "../../components/NavbarAdmin";
 import { UploadResult } from "@/app/api/s3-upload/upload-strategy.util";
 import CustomTextEditor from "@/components/text-editor";
 import { SyncLoader } from "react-spinners";
@@ -128,14 +127,13 @@ const EditBlog = () => {
 
   return (
     <div>
-      <NavBarAdmin />
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-col justify-center items-center my-12">
-          <h1 className="font-bold text-3xl pt-5 px-5">
+        <div className="flex flex-col justify-center items-center mb-12">
+          <h1 className="font-bold text-3xl pt-5">
             Neue Rundmail erstellen
           </h1>
 
-          <div className="mt-5 p-5 flex flex-col">
+          <div className="mt-5 flex w-full max-w-[600px] flex-col py-5">
             <label htmlFor="title" className="mb-2 font-bold">
               Title:
             </label>
@@ -145,18 +143,18 @@ const EditBlog = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="py-2 px-5 rounded-xl w-[600px] hover:border-slate-400 border-2 shadow-md"
+              className="py-2 px-5 rounded-xl w-full max-w-[600px] hover:border-slate-400 border-2 shadow-md"
             />
           </div>
 
-          <div className="mt-5 p-5 flex flex-col">
+          <div className="mt-5 flex w-full max-w-[600px] flex-col py-5">
             <label htmlFor="content" className="mb-2 font-bold">
               Content:
             </label>
             <CustomTextEditor content={content} onChange={onChange} />
           </div>
 
-          <div className="mt-5 p-5 flex flex-col">
+          <div className="mt-5 flex w-full max-w-[600px] flex-col py-5">
             <label htmlFor="img" className="mb-2 font-bold">
               Bild hochladen:
             </label>
@@ -169,7 +167,7 @@ const EditBlog = () => {
                 }
               }}
               required
-              className="py-2 px-5 rounded-xl w-[600px] hover:border-slate-400 border-2 shadow-md"
+              className="py-2 px-5 rounded-xl w-full max-w-[600px] hover:border-slate-400 border-2 shadow-md"
             />
           </div>
 

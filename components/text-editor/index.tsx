@@ -38,7 +38,7 @@ function CustomTextEditor({ content, onChange }: CustomTextEditorProps) {
     ],
     editorProps: {
       attributes: {
-        class: "mt-2 py-2 px-5 rounded-xl w-[600px] min-h-[500px] hover:border-slate-400 border-2 shadow-md"
+        class: "mt-2 py-2 px-5 rounded-xl w-full max-w-[600px] min-h-[500px] hover:border-slate-400 border-2 shadow-md"
       }
     },
     onUpdate: ({ editor }) => {
