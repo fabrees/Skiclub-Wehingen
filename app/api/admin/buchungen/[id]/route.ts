@@ -11,12 +11,12 @@ import {
 import { dateAusTag, tagAusDate } from "@/lib/datum";
 import { buchungAendernSchema } from "../schema";
 
-type Kontext = { params: { id: string } };
+type Kontext = { params: Promise<{ id: string }> };
 
 export async function PATCH(req: NextRequest, { params }: Kontext) {
   if (!(await isAuthorized())) return NextResponse.json("not Authorized", { status: 401 });
 
-  const id = Number(params.id);
+  const id = Number((await params).id);
   const bestehend = Number.isInteger(id) ? await prisma.buchung.findUnique({ where: { id } }) : null;
   if (!bestehend) return NextResponse.json({ error: "Buchung nicht gefunden" }, { status: 404 });
 
@@ -65,7 +65,7 @@ export async function PATCH(req: NextRequest, { params }: Kontext) {
 export async function DELETE(_req: NextRequest, { params }: Kontext) {
   if (!(await isAuthorized())) return NextResponse.json("not Authorized", { status: 401 });
 
-  const id = Number(params.id);
+  const id = Number((await params).id);
   if (!Number.isInteger(id)) return NextResponse.json({ error: "Ungültige ID" }, { status: 400 });
 
   await prisma.buchung.delete({ where: { id } }).catch(() => undefined);
