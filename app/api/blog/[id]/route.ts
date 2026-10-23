@@ -5,10 +5,11 @@ import isAuthorized from "@/app/api/auth/[...nextauth]/auth-helpers";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }) {
+  { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const uniqueBlog = await prisma.blog.findUnique({
     where: {
-      id: parseInt(params.id),
+      id: parseInt(id),
     },
   });
 
@@ -20,7 +21,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // if (!(await isAuthorized()))
   //   return NextResponse.json("not Authorized", { status: 401 })
@@ -71,7 +72,8 @@ export async function PATCH(
   }
 
   console.log("Finding blog");
-  const test = await prisma.blog.findUnique({ where: { id: parseInt(params.id) } });
+  const { id } = await params;
+  const test = await prisma.blog.findUnique({ where: { id: parseInt(id) } });
 
   if (!test) {
     console.log("Blog not found");
@@ -91,14 +93,15 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   if (!(await isAuthorized()))
     return NextResponse.json("not Authorized", { status: 401 })
 
+  const { id } = await params;
   const body = await prisma.blog.findUnique({
     where: {
-      id: parseInt(params.id),
+      id: parseInt(id),
     },
   });
 
