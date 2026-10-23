@@ -3,6 +3,10 @@ const nextConfig = {
   output: 'standalone',
   
   images: {
+    // Bilder werden unverändert ausgeliefert. Der Bildoptimierer von Next 14
+    // hat ungepatchte Sicherheitslücken (/_next/image); die Bilder in public
+    // sind bereits verkleinert. Erst mit Next >= 15.5.28 wieder einschalten.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
