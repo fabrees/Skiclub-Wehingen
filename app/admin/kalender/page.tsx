@@ -506,7 +506,7 @@ const BuchungsKalenderAdmin = () => {
               <h2 className="mb-3 text-lg font-bold text-alb-900">Kommende Buchungen</h2>
               {kommende.length === 0 && <p className="text-sm text-slate-500">Keine kommenden Buchungen.</p>}
               <ul className="divide-y divide-slate-100 text-sm">
-                {kommende.slice(0, 10).map((b) => (
+                {kommende.slice(0, 5).map((b) => (
                   <li key={b.id}>
                     <button
                       type="button"
@@ -521,6 +521,11 @@ const BuchungsKalenderAdmin = () => {
                   </li>
                 ))}
               </ul>
+              {kommende.length > 5 && (
+                <p className="mt-2 text-sm text-slate-500">
+                  und {kommende.length - 5} weitere – im Kalender durchblättern.
+                </p>
+              )}
             </section>
 
             {einstellungen && (
