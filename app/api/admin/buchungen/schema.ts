@@ -7,7 +7,7 @@ const felder = {
   von: tag,
   bis: tag,
   titel: z.string().trim().min(1, "Bitte einen Text eingeben").max(200),
-  status: z.enum(["ANFRAGE", "BESTAETIGT"]),
+  status: z.enum(["ANFRAGE", "BESTAETIGT", "OEFFENTLICH"]),
   name: z.string().trim().max(200).nullish(),
   email: z.string().trim().max(200).nullish(),
   nachricht: z.string().trim().max(5000).nullish(),

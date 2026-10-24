@@ -5,6 +5,7 @@ import isAuthorized from "@/app/api/auth/[...nextauth]/auth-helpers";
 import {
   belegendeBuchungen,
   buchungAlsJson,
+  DAUERHAFT_BELEGEND,
   ladeEinstellungen,
   ueberschneidung,
 } from "@/lib/buchungen";
@@ -36,7 +37,7 @@ export async function PATCH(req: NextRequest, { params }: Kontext) {
   const einstellungen = await ladeEinstellungen();
   const neueSperre = () => new Date(Date.now() + einstellungen.anfrageSperreStunden * 3600 * 1000);
 
-  if (status === "BESTAETIGT") data.geblocktBis = null;
+  if (status && DAUERHAFT_BELEGEND.includes(status)) data.geblocktBis = null;
   if (status === "ANFRAGE" && bestehend.status !== "ANFRAGE") data.geblocktBis = neueSperre();
   if (status) data.status = status;
   if (sperreVerlaengern && (status ?? bestehend.status) === "ANFRAGE") data.geblocktBis = neueSperre();
@@ -44,7 +45,7 @@ export async function PATCH(req: NextRequest, { params }: Kontext) {
   // Wird die Buchung danach den Zeitraum belegen, darf sie sich nicht mit
   // anderen belegenden Buchungen überschneiden
   const wirdBelegen =
-    (status ?? bestehend.status) === "BESTAETIGT" ||
+    DAUERHAFT_BELEGEND.includes(status ?? bestehend.status) ||
     (data.geblocktBis instanceof Date ? data.geblocktBis : bestehend.geblocktBis ?? new Date(0)) > new Date();
   if (wirdBelegen) {
     const konflikt = await prisma.buchung.findFirst({

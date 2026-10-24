@@ -136,6 +136,10 @@ Falls die Datenbank bisher nicht über Prisma-Migrationen gepflegt wurde
 nur das SQL aus `prisma/migrations/20261019200000_buchungskalender/migration.sql`
 ausführen.
 
+Für den Status „Öffentlich“ kommt eine weitere Migration dazu
+(`20261024120000_buchung_oeffentlich`). Sie wird bei `migrate deploy`
+automatisch mit angewendet.
+
 Für das interne Kalender-Abo (ICS mit Namen und Text) in **beiden**
 Dateien einen langen Zufallswert setzen, z. B. mit `openssl rand -hex 24`:
 
@@ -144,7 +148,7 @@ KALENDER_ICS_TOKEN=…
 ```
 
 Ohne Token gibt es nur das öffentliche Abo (`/api/kalender/belegung.ics`,
-nur „Belegt“). Beide Abo-Links stehen im Admin-Bereich unter
+„Belegt“ bzw. der Text öffentlicher Termine). Beide Abo-Links stehen im Admin-Bereich unter
 *Buchungskalender*. Buchungshorizont (Standard 365 Tage) und Sperrfrist für
 Anfragen (Standard 24 h) lassen sich dort ändern.
 

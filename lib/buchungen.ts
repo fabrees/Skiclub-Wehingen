@@ -1,4 +1,4 @@
-import { Buchung, Prisma } from "@prisma/client";
+import { Buchung, BuchungStatus, Prisma } from "@prisma/client";
 import prisma from "@/prisma/lib/client";
 import { dateAusTag, heute, plusTage, Tag, tagAusDate, tageImZeitraum } from "@/lib/datum";
 
@@ -41,12 +41,15 @@ export async function speichereEinstellungen(werte: Partial<Einstellungen>) {
   );
 }
 
-// Buchungen, die einen Zeitraum aktuell belegen: bestätigte sowie Anfragen,
-// deren Sperrfrist noch läuft. Abgelaufene Anfragen bleiben gespeichert,
-// geben den Zeitraum aber wieder frei.
+// Status, die einen Zeitraum dauerhaft belegen
+export const DAUERHAFT_BELEGEND: BuchungStatus[] = ["BESTAETIGT", "OEFFENTLICH"];
+
+// Buchungen, die einen Zeitraum aktuell belegen: bestätigte und öffentliche
+// sowie Anfragen, deren Sperrfrist noch läuft. Abgelaufene Anfragen bleiben
+// gespeichert, geben den Zeitraum aber wieder frei.
 export function belegendeBuchungen(jetzt = new Date()): Prisma.BuchungWhereInput {
   return {
-    OR: [{ status: "BESTAETIGT" }, { status: "ANFRAGE", geblocktBis: { gt: jetzt } }],
+    OR: [{ status: { in: DAUERHAFT_BELEGEND } }, { status: "ANFRAGE", geblocktBis: { gt: jetzt } }],
   };
 }
 
@@ -55,7 +58,7 @@ export function ueberschneidung(von: Tag, bis: Tag): Prisma.BuchungWhereInput {
 }
 
 export function istBelegend(b: Pick<Buchung, "status" | "geblocktBis">, jetzt = new Date()) {
-  return b.status === "BESTAETIGT" || (b.geblocktBis !== null && b.geblocktBis > jetzt);
+  return DAUERHAFT_BELEGEND.includes(b.status) || (b.geblocktBis !== null && b.geblocktBis > jetzt);
 }
 
 // Belegte Tage im buchbaren Zeitraum, ohne Details zu den Buchungen
@@ -71,6 +74,16 @@ export async function belegteTage(von: Tag, bis: Tag): Promise<Tag[]> {
     for (const t of tageImZeitraum(start, ende)) tage.add(t);
   }
   return Array.from(tage).sort();
+}
+
+// Öffentliche Termine im Zeitraum, nur mit Text – für die Website
+export async function oeffentlicheTermine(von: Tag, bis: Tag) {
+  const termine = await prisma.buchung.findMany({
+    where: { AND: [{ status: "OEFFENTLICH" }, ueberschneidung(von, bis)] },
+    select: { von: true, bis: true, titel: true },
+    orderBy: { von: "asc" },
+  });
+  return termine.map((t) => ({ von: tagAusDate(t.von), bis: tagAusDate(t.bis), titel: t.titel }));
 }
 
 // Erster und letzter Tag, der über die Website angefragt werden kann

@@ -16,14 +16,22 @@ import {
 
 export type Zeitraum = { von: Tag; bis: Tag } | null;
 
-type Verfuegbarkeit = { ersterTag: Tag; letzterTag: Tag; belegt: Tag[]; sperreStunden: number };
+type Termin = { von: Tag; bis: Tag; titel: string };
+type Verfuegbarkeit = {
+  ersterTag: Tag;
+  letzterTag: Tag;
+  belegt: Tag[];
+  // Öffentliche Vereinstermine, deren Text angezeigt wird (belegen ebenfalls)
+  termine: Termin[];
+  sperreStunden: number;
+};
 
 const ersterDesMonats = (tag: Tag) => {
   const d = dateAusTag(tag);
   return monatsAnfang(d.getUTCFullYear(), d.getUTCMonth());
 };
 
-// Lädt die Belegung der Skihütte (nur frei/belegt)
+// Lädt die Belegung der Skihütte (frei/belegt und öffentliche Termine)
 export function useVerfuegbarkeit() {
   const [daten, setDaten] = useState<Verfuegbarkeit | null>(null);
   const [fehler, setFehler] = useState(false);
@@ -62,6 +70,11 @@ const BelegungsKalender = ({
 }) => {
   const { ersterTag, letzterTag } = verfuegbarkeit;
   const belegt = useMemo(() => new Set(verfuegbarkeit.belegt), [verfuegbarkeit.belegt]);
+  const terminAmTag = useMemo(() => {
+    const karte = new Map<Tag, string>();
+    for (const t of verfuegbarkeit.termine) for (const tag of tageImZeitraum(t.von, t.bis)) karte.set(tag, t.titel);
+    return karte;
+  }, [verfuegbarkeit.termine]);
 
   const ersterMonat = ersterDesMonats(ersterTag);
   const letzterMonat = ersterDesMonats(letzterTag);
@@ -92,6 +105,8 @@ const BelegungsKalender = ({
 
   // Auf großen Bildschirmen zwei Monate nebeneinander
   const monate = [monat, naechsterMonat(monat)];
+  const nachDenMonaten = naechsterMonat(monat, 2);
+  const termineImBlick = verfuegbarkeit.termine.filter((t) => t.von < nachDenMonaten && t.bis >= monat);
 
   return (
     <div>
@@ -136,12 +151,14 @@ const BelegungsKalender = ({
                   {monatsRaster(m).map((tag, j) => {
                     if (!tag) return <div key={`leer-${j}`} />;
                     const istBelegt = belegt.has(tag);
+                    const termin = terminAmTag.get(tag);
                     const ausserhalb = tag < ersterTag || tag > letzterTag;
                     const imZeitraum = vorschau && tag >= vorschau.von && tag <= vorschau.bis;
                     const istRand = vorschau && (tag === vorschau.von || tag === vorschau.bis);
 
                     let klasse = "text-alb-900 hover:bg-brand-50 bg-tanne-50";
                     if (ausserhalb) klasse = "text-slate-300 cursor-not-allowed";
+                    else if (termin) klasse = "bg-alb-800 text-white cursor-not-allowed";
                     else if (istBelegt)
                       klasse = "bg-slate-200 text-slate-400 line-through cursor-not-allowed";
                     if (imZeitraum) klasse = "bg-brand-100 text-brand-700";
@@ -151,12 +168,13 @@ const BelegungsKalender = ({
                       <button
                         key={tag}
                         type="button"
-                        disabled={ausserhalb || istBelegt}
+                        disabled={ausserhalb || istBelegt || !!termin}
                         onClick={() => klick(tag)}
                         onMouseEnter={() => setHover(tag)}
                         aria-label={`${formatTag(tag, { weekday: "long", month: "long" })}${
-                          istBelegt ? ", belegt" : ausserhalb ? ", nicht buchbar" : ", frei"
+                          termin ? `, belegt: ${termin}` : istBelegt ? ", belegt" : ausserhalb ? ", nicht buchbar" : ", frei"
                         }`}
+                        title={termin}
                         aria-pressed={!!imZeitraum}
                         className={`aspect-square rounded-lg text-sm transition sm:text-base ${klasse}`}
                       >
@@ -177,10 +195,32 @@ const BelegungsKalender = ({
           <span className="flex items-center gap-2">
             <span className="h-4 w-4 rounded bg-slate-200" /> belegt
           </span>
+          {verfuegbarkeit.termine.length > 0 && (
+            <span className="flex items-center gap-2">
+              <span className="h-4 w-4 rounded bg-alb-800" /> Vereinstermin
+            </span>
+          )}
           <span className="flex items-center gap-2">
             <span className="h-4 w-4 rounded bg-brand-500" /> Ihre Auswahl
           </span>
         </div>
+
+        {termineImBlick.length > 0 && (
+          <ul className="mt-3 space-y-1 text-sm">
+            {termineImBlick.map((t) => (
+              <li
+                key={`${t.von}-${t.titel}`}
+                // Auf dem Handy ist nur der erste Monat sichtbar
+                className={`gap-2 ${t.von < naechsterMonat(monat) ? "flex" : "hidden sm:flex"}`}
+              >
+                <span className="mt-1 h-3 w-3 shrink-0 rounded bg-alb-800" aria-hidden />
+                <span>
+                  <span className="font-semibold text-alb-900">{formatZeitraum(t.von, t.bis)}</span> · {t.titel}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <p className="mt-2 text-sm text-slate-600" aria-live="polite">

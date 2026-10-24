@@ -1,18 +1,22 @@
 import { NextResponse } from "next/server";
-import { belegteTage, buchbarerZeitraum, ladeEinstellungen } from "@/lib/buchungen";
+import { belegteTage, buchbarerZeitraum, ladeEinstellungen, oeffentlicheTermine } from "@/lib/buchungen";
 
 export const dynamic = "force-dynamic";
 
-// Öffentlich: nur frei/belegt, keine Details zu den Buchungen
+// Öffentlich: nur frei/belegt, Text nur bei öffentlichen Terminen
 export async function GET() {
   try {
     const einstellungen = await ladeEinstellungen();
     const { ersterTag, letzterTag } = buchbarerZeitraum(einstellungen);
-    const belegt = await belegteTage(ersterTag, letzterTag);
+    const [belegt, termine] = await Promise.all([
+      belegteTage(ersterTag, letzterTag),
+      oeffentlicheTermine(ersterTag, letzterTag),
+    ]);
     return NextResponse.json({
       ersterTag,
       letzterTag,
       belegt,
+      termine,
       sperreStunden: einstellungen.anfrageSperreStunden,
     });
   } catch (err) {

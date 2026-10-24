@@ -7,7 +7,7 @@ import { dateAusTag, heute, plusTage, tagAusDate } from "@/lib/datum";
 export const dynamic = "force-dynamic";
 
 // Kalender-Abo im iCalendar-Format (RFC 5545).
-//   /api/kalender/belegung.ics              → nur „Belegt“, öffentlich
+//   /api/kalender/belegung.ics              → „Belegt“ bzw. Text öffentlicher Termine
 //   /api/kalender/belegung.ics?token=…      → mit Text und Kontakt, Token aus KALENDER_ICS_TOKEN
 
 function tokenGueltig(token: string | null) {
@@ -65,7 +65,9 @@ export async function GET(req: NextRequest) {
 
   for (const b of buchungen) {
     const anfrage = b.status === "ANFRAGE";
-    const titel = details ? `${anfrage ? "Anfrage: " : ""}${b.titel}` : "Belegt";
+    // Öffentliche Termine zeigen ihren Text auch im öffentlichen Abo
+    const oeffentlich = b.status === "OEFFENTLICH";
+    const titel = details ? `${anfrage ? "Anfrage: " : ""}${b.titel}` : oeffentlich ? b.titel : "Belegt";
     const beschreibung = details
       ? [b.name && `Name: ${b.name}`, b.email && `E-Mail: ${b.email}`, b.nachricht, anfrage && b.geblocktBis
           ? `Vorläufig geblockt bis ${b.geblocktBis.toLocaleString("de-DE", { timeZone: "Europe/Berlin" })}`

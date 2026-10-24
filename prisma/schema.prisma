@@ -30,6 +30,7 @@ model LinkData {
 enum BuchungStatus {
   ANFRAGE    // über die Website angefragt, für eine begrenzte Zeit geblockt
   BESTAETIGT // vom Hüttenwart bestätigt oder selbst eingetragen
+  OEFFENTLICH // Vereinstermin: blockiert wie bestätigt, Text ist auf der Website sichtbar
 }
 
 // Belegung der Skihütte. "von" und "bis" sind beide inklusive (ganze Tage).
@@ -38,7 +39,7 @@ model Buchung {
   von         DateTime      @db.Date
   bis         DateTime      @db.Date
   status      BuchungStatus @default(ANFRAGE)
-  // Text für den Admin-Kalender, öffentlich nie sichtbar
+  // Text für den Admin-Kalender; öffentlich nur bei Status OEFFENTLICH sichtbar
   titel       String        @db.VarChar(200)
   name        String?       @db.VarChar(200)
   email       String?       @db.VarChar(200)

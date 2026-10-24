@@ -22,7 +22,7 @@ type Entwurf = {
   von: Tag;
   bis: Tag;
   titel: string;
-  status: "ANFRAGE" | "BESTAETIGT";
+  status: "ANFRAGE" | "BESTAETIGT" | "OEFFENTLICH";
   name: string;
   email: string;
   nachricht: string;
@@ -58,9 +58,11 @@ const alsEntwurf = (b: Buchung): Entwurf => ({
 const formatZeit = (iso: string) =>
   new Date(iso).toLocaleString("de-DE", { timeZone: "Europe/Berlin", dateStyle: "short", timeStyle: "short" });
 
-// Farbe je nach Zustand: bestätigt, offene Anfrage, abgelaufene Anfrage
+// Farbe je nach Zustand: öffentlich, bestätigt, offene Anfrage, abgelaufene Anfrage
 const chipKlasse = (b: Buchung) =>
-  b.status === "BESTAETIGT"
+  b.status === "OEFFENTLICH"
+    ? "bg-alb-800 text-white"
+    : b.status === "BESTAETIGT"
     ? "bg-brand-500 text-white"
     : b.belegt
       ? "bg-brand-100 text-brand-700 ring-1 ring-dashed ring-brand-500"
@@ -107,7 +109,7 @@ const BuchungsKalenderAdmin = () => {
   }, [buchungen, monat]);
 
   const offeneAnfragen = buchungen.filter((b) => b.status === "ANFRAGE" && b.belegt);
-  const kommende = buchungen.filter((b) => b.status === "BESTAETIGT" && b.bis >= heute());
+  const kommende = buchungen.filter((b) => b.status !== "ANFRAGE" && b.bis >= heute());
 
   const anfrage = async (url: string, method: string, body?: unknown, erfolg?: string) => {
     setMeldung(null);
@@ -299,6 +301,9 @@ const BuchungsKalenderAdmin = () => {
                 <span className="h-4 w-4 rounded bg-brand-500" /> bestätigt
               </span>
               <span className="flex items-center gap-2">
+                <span className="h-4 w-4 rounded bg-alb-800" /> öffentlich (Text auf der Website)
+              </span>
+              <span className="flex items-center gap-2">
                 <span className="h-4 w-4 rounded bg-brand-100 ring-1 ring-brand-500" /> Anfrage (geblockt)
               </span>
               <span className="flex items-center gap-2">
@@ -387,9 +392,16 @@ const BuchungsKalenderAdmin = () => {
                     className={feldKlasse}
                   >
                     <option value="BESTAETIGT">Bestätigt</option>
+                    <option value="OEFFENTLICH">Öffentlich (Text auf der Website sichtbar)</option>
                     <option value="ANFRAGE">Anfrage (vorläufig geblockt)</option>
                   </select>
                 </label>
+                {entwurf.status === "OEFFENTLICH" && (
+                  <p className="text-sm text-alb-600">
+                    Der Text erscheint im Kalender der Mietanfrage und im öffentlichen Kalender-Abo. Name, E-Mail
+                    und Notiz bleiben intern.
+                  </p>
+                )}
                 {ausgewaehlt?.status === "ANFRAGE" && ausgewaehlt.geblocktBis && (
                   <p className={`text-sm ${ausgewaehlt.belegt ? "text-brand-700" : "text-red-600"}`}>
                     {ausgewaehlt.belegt
