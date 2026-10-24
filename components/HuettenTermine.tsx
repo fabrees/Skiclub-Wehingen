@@ -9,7 +9,7 @@ const wochentag = (tag: Tag) => formatTag(tag, { weekday: "short", day: undefine
 const HuettenTermine = async () => {
   let termine: Awaited<ReturnType<typeof kommendeOeffentlicheTermine>> = [];
   try {
-    termine = await kommendeOeffentlicheTermine(5);
+    termine = await kommendeOeffentlicheTermine(4);
   } catch (err) {
     console.error("Hüttentermine: Laden fehlgeschlagen", err);
   }
@@ -22,7 +22,7 @@ const HuettenTermine = async () => {
           <CalendarDays className="h-4 w-4" aria-hidden />
           Termine auf der Hütte
         </h2>
-        <ul className="mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-2">
           {termine.map((t) => (
             <li key={t.id} className="flex gap-3 text-sm sm:text-base">
               <span className="shrink-0 font-semibold text-alb-900 tabular-nums">
