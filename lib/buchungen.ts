@@ -86,6 +86,17 @@ export async function oeffentlicheTermine(von: Tag, bis: Tag) {
   return termine.map((t) => ({ von: tagAusDate(t.von), bis: tagAusDate(t.bis), titel: t.titel }));
 }
 
+// Nächste öffentliche Termine ab heute (laufende eingeschlossen)
+export async function kommendeOeffentlicheTermine(anzahl: number) {
+  const termine = await prisma.buchung.findMany({
+    where: { status: "OEFFENTLICH", bis: { gte: dateAusTag(heute()) } },
+    select: { id: true, von: true, bis: true, titel: true },
+    orderBy: { von: "asc" },
+    take: anzahl,
+  });
+  return termine.map((t) => ({ id: t.id, von: tagAusDate(t.von), bis: tagAusDate(t.bis), titel: t.titel }));
+}
+
 // Erster und letzter Tag, der über die Website angefragt werden kann
 export function buchbarerZeitraum(einstellungen: Einstellungen) {
   const ersterTag = heute();
