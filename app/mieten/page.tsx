@@ -2,6 +2,10 @@ import { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import HuettenGalerie from "@/components/HuettenGalerie";
 import MietAnfrageForm from "@/components/MietAnfrageForm";
+import HuettenTermine from "@/components/HuettenTermine";
+
+// Öffentliche Termine kommen bei jedem Aufruf frisch aus der Datenbank
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Skihütte – Skiclub Wehingen",
@@ -18,8 +22,11 @@ const Mieten = () => (
       Platz für gesellige Stunden.
     </PageHeader>
 
-    <div className="pt-16 sm:pt-20">
-      <HuettenGalerie />
+    <div className="pt-12 sm:pt-16">
+      <HuettenTermine />
+      <div className="pt-4">
+        <HuettenGalerie />
+      </div>
     </div>
 
     {/* KONTAKT-FORMULAR */}

@@ -11,11 +11,6 @@ export const options: NextAuthOptions = {
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                username: {
-                    label: "Username:",
-                    type: "text",
-                    placeholder: "your username",
-                },
                 password: {
                     label: "Password:",
                     type: "password",
@@ -23,20 +18,17 @@ export const options: NextAuthOptions = {
                 }
             },
             async authorize(credentials) {
-                const user = {
-                    id: "42",
-                    name: process.env.NEXTAUTH_USERNAME as string,
-                    password: process.env.NEXTAUTH_PASSWORD as string
-                }
+                const adminPassword = process.env.NEXTAUTH_PASSWORD;
 
-                if (
-                    credentials?.username === user.name &&
-                    credentials?.password === user.password
-                ) {
-                    return user;
-                } else {
+                // Ohne gesetztes Passwort niemals einloggen lassen
+                if (!adminPassword || !credentials?.password) {
                     return null;
                 }
+
+                if (credentials.password === adminPassword) {
+                    return { id: "42", name: "Admin" };
+                }
+                return null;
             }
         })
     ],

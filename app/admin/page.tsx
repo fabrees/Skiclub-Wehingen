@@ -11,7 +11,6 @@ import {
 import { Blog } from "@prisma/client";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import React, { useEffect, useState } from "react";
-import NavbarAdmin from "@/app/admin/components/NavbarAdmin";
 import DeleteButton from "@/app/admin/components/DeleteBlogButton";
 import EditBlogButton from "@/app/admin/components/EditBlogButton";
 
@@ -36,10 +35,9 @@ const AdminDashboard = () => {
 
 
 return (
-  <div className="flex flex-col items-end lg:items-center mr-5 mb-12 py-11 z-0">
-    <NavbarAdmin />
-    <div className="flex flex-col items-center">
-      <h1 className="font-bold md:text-6xl tracking-tight text-3xl">
+  <div className="mb-12">
+    <div className="mx-auto flex max-w-4xl flex-col">
+      <h1 className="font-bold md:text-5xl tracking-tight text-3xl">
         Verwaltung aller Rundmails
       </h1>
 
@@ -47,11 +45,11 @@ return (
         Bearbeite alle bereits erstellten Rundmails
       </p>
 
-      <div className="w-full min-h-screen">
+      <div className="w-full">
         {blogs.map((blog) => (
           <div key={blog.id} className="w-full  place-self-end">
             <Card className="p-5 mt-6 shadow-md">
-              <CardContent className=" pb-0 flex flex-row justify-between">
+              <CardContent className="pb-0 flex flex-row items-center justify-between gap-4 break-words">
                 {blog.title}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
